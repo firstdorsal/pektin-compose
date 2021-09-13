@@ -1,0 +1,14 @@
+{
+    "name": "pektin-install",
+    "authors": "Paul Colin Hennig",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "license": "MIT",
+    "scripts": {
+        "start": "node --no-warnings index.js"
+    },
+    "dependencies": {
+        "node-fetch": "^3.0.0"
+    }
+}

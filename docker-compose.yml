@@ -1,0 +1,64 @@
+version: "3.7"
+services:
+    vault:
+        image: vault:latest
+        container_name: pektin-vault
+        restart: always
+        cap_add:
+            - IPC_LOCK
+        volumes:
+            - vault:/vault/data/
+            - ./config/vault/:/vault/config/
+        command: server
+        networks:
+            - vault
+        ports:
+            - 127.0.0.1:8200:8200
+    ui:
+        image: pektin/ui
+        container_name: pektin-ui
+        restart: always
+        networks:
+            - vault
+            - rp
+    api:
+        image: pektin/api
+        container_name: pektin-api
+        restart: always
+        environment:
+            - VAULT_ROLE_ID=${V_PEKTIN_API_ROLE_ID}
+            - VAULT_SECRET_ID=${V_PEKTIN_API_SECRET_ID}
+            - R_PEKTIN_API_PASSWORD=${R_PEKTIN_API_PASSWORD}
+        networks:
+            - vault
+            - db
+    redis:
+        image: redis:latest
+        container_name: pektin-redis
+        restart: always
+        volumes:
+            - db:/var/lib/redis
+            - ./config/redis/:/usr/local/etc/redis/
+        networks:
+            - db
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+    server:
+        image: pektin/server
+        container_name: pektin-server
+        restart: always
+        environment:
+            - R_PEKTIN_PASSWORD=${R_PEKTIN_PASSWORD}
+        networks:
+            - db
+        ports:
+            - 53:53/udp
+            - 53:53/tcp
+
+networks:
+    vault:
+    db:
+    rp:
+        name: rp
+volumes:
+    vault:
+    db:
