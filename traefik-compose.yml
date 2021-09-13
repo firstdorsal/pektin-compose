@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+    rp:
+        container_name: rp
+        image: traefik
+        restart: always
+        ports:
+            - 80:80
+            - 443:443/udp
+            - 443:443/tcp
+        networks:
+            - rp
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./letsencrypt:/letsencrypt
+            - ./traefik/traefik.yml:/traefik/traefik.yaml
+        command:
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
+            - --experimental.http3=true
+            - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --entrypoints.websecure.enablehttp3=true
+            - --certificatesresolvers.default.acme.dnschallenge=true
+            - --certificatesresolvers.default.acme.dnschallenge.provider=pdns
+            - --certificatesresolvers.default.acme.email=letsencrypt@y.gy
+            - --certificatesresolvers.default.acme.storage=/letsencrypt/acme.json
+            - --providers.file.filename=/traefik/traefik.yaml
+        labels:
+            traefik.enable: "true"
+            # redirect
+            traefik.http.routers.http-catchall.rule: "hostregexp(`{host:.+}`)"
+            traefik.http.routers.http-catchall.entrypoints: "web"
+            traefik.http.routers.http-catchall.middlewares: "redirect-to-https"
+            traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
+            traefik.http.middlewares.redirect-to-https.redirectscheme.permanent: "true"
+
+networks:
+    rp:
+        name: rp
