@@ -1,0 +1,6 @@
+{
+    "domain": "example.com",
+    "uiSubDomain": "ui.pektin",
+    "apiSubDomain": "api.pektin",
+    "vaultSubDomain": "vault.pektin"
+}
