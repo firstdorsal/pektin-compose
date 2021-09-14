@@ -2,5 +2,10 @@
     "domain": "example.com",
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
-    "vaultSubDomain": "vault.pektin"
+    "vaultSubDomain": "vault.pektin",
+    "uiEnabled": true,
+    "autoRotate": true,
+    "autoCertificates": true,
+    "autoConfigureMainDomain": true,
+    "development": true
 }

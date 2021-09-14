@@ -1,0 +1,1 @@
+{"username":"ui-eJA7zXlAEzPAMQ","password":"WxEHAbRtMl-3hKARZ07NwpXVcKhrvbLRyFtXD8oPjkvNQxt1xByHT96dRc_ljHv8ZiYQ65-UIX2olxfVWHv21SqS_dFLPlPESGgLmGPkIv1p2wzUp-WKYc3pLKD7GpgIkdlZsg","vaultEndpoint":"http://127.0.0.1:8200"}

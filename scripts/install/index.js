@@ -20,6 +20,21 @@ await l.enableSecretEngine(vaultTokens.rootToken, "pektin-transit", { type: "tra
 
 const { role_id, secret_id } = await l.createAppRole(vaultTokens.rootToken, "v-pektin-api", "v-pektin-api");
 
+if (pektinConfig.uiEnabled) {
+    // create ui account and access config for it
+    const vaultEndpoint = pektinConfig.development ? `http://127.0.0.1:8200` : `https://${pektinConfig.vaultSubDomain}.${pektinConfig.domain}`;
+
+    const pektinUiConnectionConfig = {
+        username: `ui-${l.randomString(10)}`,
+        password: l.randomString(),
+        vaultEndpoint
+    };
+
+    await l.enableCors(vaultTokens.rootToken);
+
+    await l.createUserPassAccount(vaultTokens.rootToken, pektinUiConnectionConfig.username, "v-pektin-high-privilege-client", pektinUiConnectionConfig.password);
+    await fs.writeFile(path.join(dir, "ui-access.txt"), JSON.stringify(pektinUiConnectionConfig));
+}
 // set the pektin config on vault for easy service discovery
 await l.updatePektinConfig(vaultTokens.rootToken, pektinConfig);
 

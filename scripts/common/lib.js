@@ -29,6 +29,29 @@ export const updatePektinConfig = async (vaultToken, config) => {
     });
 };
 
+export const enableCors = async vaultToken => {
+    await f(`${vaultUrl}/v1/sys/config/cors`, {
+        method: "PUT",
+        headers: {
+            "X-Vault-Token": vaultToken
+        },
+        body: JSON.stringify({
+            allowed_origins: "*",
+            allowed_headers: ["X-Vault-Token"]
+        })
+    });
+};
+
+export const createUserPassAccount = async (vaultToken, name, policies, password) => {
+    await f(path.join(vaultUrl, "/v1/auth/userpass/users/", name), {
+        method: "POST",
+        headers: {
+            "X-Vault-Token": vaultToken
+        },
+        body: JSON.stringify({ policies, password })
+    });
+};
+
 export const createAppRole = async (vaultToken, name, policies) => {
     // create role
     await f(path.join(vaultUrl, "/v1/auth/approle/role/", name), {
@@ -118,7 +141,7 @@ export const getVaultTokens = async () => {
     return { key: vaultTokens.keys[0], rootToken: vaultTokens.root_token };
 };
 
-export const randomString = () => crypto.randomBytes(100).toString("base64url").replaceAll("=", "");
+export const randomString = (length = 100) => crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
 
 export const envSetValues = async v => {
     const repls = [
