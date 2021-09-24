@@ -7,5 +7,5 @@
     "autoRotate": true,
     "autoCertificates": true,
     "autoConfigureMainDomain": true,
-    "development": true
+    "dev": true
 }
