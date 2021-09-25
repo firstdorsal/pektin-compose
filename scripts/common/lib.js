@@ -104,10 +104,14 @@ export const enableAuthMethod = async (vaultToken, type) => {
 
 export const createVaultPolicies = async vaultToken => {
     return await Promise.all(
-        ["v-pektin-api", "v-pektin-low-privilege-client", "v-pektin-high-privilege-client", "v-pektin-rotate-client"].map(async policyName => {
-            const policy = await fs.readFile(path.join(dir, "scripts/install/policies", policyName + ".hcl"), { encoding: "UTF-8" });
-            return createVaultPolicy(vaultToken, policyName, policy);
-        })
+        ["v-pektin-api", "v-pektin-low-privilege-client", "v-pektin-high-privilege-client", "v-pektin-rotate-client"].map(
+            async policyName => {
+                const policy = await fs.readFile(path.join(dir, "scripts/install/policies", policyName + ".hcl"), {
+                    encoding: "UTF-8"
+                });
+                return createVaultPolicy(vaultToken, policyName, policy);
+            }
+        )
     );
 };
 

@@ -7,5 +7,7 @@
     "autoRotate": true,
     "autoCertificates": true,
     "autoConfigureMainDomain": true,
-    "dev": true
+    "dev": true,
+    "proxy": "traefik",
+    "createProxy": true
 }

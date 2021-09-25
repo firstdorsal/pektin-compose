@@ -8,7 +8,7 @@ services:
             - IPC_LOCK
         volumes:
             - vault:/vault/data/
-            - ./config/vault/:/vault/config/
+            - ../config/vault/:/vault/config/
         command: server
         networks:
             - vault
@@ -39,7 +39,7 @@ services:
         restart: always
         volumes:
             - db:/var/lib/redis
-            - ./config/redis/:/usr/local/etc/redis/
+            - ../config/redis/:/usr/local/etc/redis/
         networks:
             - db
         command: "redis-server /usr/local/etc/redis/redis.conf"
@@ -48,7 +48,7 @@ services:
         container_name: pektin-server
         restart: always
         environment:
-            - R_PEKTIN_PASSWORD=${R_PEKTIN_PASSWORD}
+            - R_PEKTIN_SERVER_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
         networks:
             - db
         ports:
