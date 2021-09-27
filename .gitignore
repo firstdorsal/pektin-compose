@@ -1,3 +1,5 @@
-/.env
+*.env
 config/redis/users.acl
 ui-access.json
+start.sh
+compose/src

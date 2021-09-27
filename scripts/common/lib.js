@@ -3,8 +3,12 @@ import { exit } from "process";
 import crypto from "crypto";
 import fs from "fs/promises";
 import path from "path";
+import { promisify } from "util";
+import { exec as exec_default } from "child_process";
+
 const vaultUrl = "http://pektin-vault:8200";
 const dir = "/pektin-compose/";
+const exec = promisify(exec_default);
 
 export const error = error => {
     console.error(error);
@@ -148,6 +152,10 @@ export const getVaultTokens = async () => {
 export const randomString = (length = 100) => crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
 
 export const envSetValues = async v => {
+    const CSP_CONNECT_SRC = v.pektinConfig.dev
+        ? `*`
+        : `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
+
     const repls = [
         ["V_PEKTIN_API_ROLE_ID", v.role_id],
         ["V_PEKTIN_API_SECRET_ID", v.secret_id],
@@ -158,13 +166,14 @@ export const envSetValues = async v => {
         ["DOMAIN", v.pektinConfig.domain],
         ["UI_SUBDOMAIN", v.pektinConfig.uiSubDomain],
         ["API_SUBDOMAIN", v.pektinConfig.apiSubDomain],
-        ["VAULT_SUBDOMAIN", v.pektinConfig.vaultSubDomain]
+        ["VAULT_SUBDOMAIN", v.pektinConfig.vaultSubDomain],
+        ["CSP_CONNECT_SRC", CSP_CONNECT_SRC]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
     repls.forEach(repl => {
         file = file += `${repl[0]}="${repl[1]}"\n`;
     });
-    await fs.writeFile(path.join(dir, ".env"), file);
+    await fs.writeFile(path.join(dir, "compose", ".env"), file);
 };
 export const setRedisPasswordHashes = async repls => {
     let file = await fs.readFile(path.join(dir, "config", "redis", "users.template.acl"), { encoding: "UTF-8" });
@@ -176,4 +185,26 @@ export const setRedisPasswordHashes = async repls => {
     });
     await fs.writeFile(path.join(dir, "config", "redis", "users.acl"), file);
     crypto.create;
+};
+
+export const buildFromSource = async pektinConfig => {
+    await fs.mkdir(path.join(dir, "compose", "src")).catch(() => {});
+    const src = path.join(dir, "compose", "src");
+    const clone = `git clone https://github.com/pektin-dns/`;
+
+    await exec(`${clone}pektin-server ${path.join(src, "pektin-server")}`);
+    if (pektinConfig.enableApi) await exec(`${clone}pektin-api ${path.join(src, "pektin-api")}`);
+    if (pektinConfig.enableUi) await exec(`${clone}pektin-ui ${path.join(src, "pektin-ui")}`);
+};
+
+export const createStartScript = async pektinConfig => {
+    let file = `#!/bin/sh \n`;
+    file += `docker-compose -f compose/pektin.yml`;
+    if (pektinConfig.buildFromSource) file += ` -f compose/build-from-source.yml `;
+    if (pektinConfig.proxyConfig === "traefik") file += ` -f compose/traefik-config.yml `;
+    if (pektinConfig.createProxy === true) {
+        if (pektinConfig.proxyConfig === "traefik") file += ` -f compose/traefik.yml `;
+    }
+    file += `up -d`;
+    await fs.writeFile(path.join(dir, "start.sh"), file);
 };

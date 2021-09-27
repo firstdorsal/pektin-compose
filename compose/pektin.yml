@@ -16,6 +16,8 @@ services:
         image: pektin/ui
         container_name: pektin-ui
         restart: always
+        environment:
+            - CSP_CONNECT_SRC=${CSP_CONNECT_SRC}
         networks:
             - vault
             - rp
@@ -24,8 +26,8 @@ services:
         container_name: pektin-api
         restart: always
         environment:
-            - VAULT_ROLE_ID=${V_PEKTIN_API_ROLE_ID}
-            - VAULT_SECRET_ID=${V_PEKTIN_API_SECRET_ID}
+            - V_PEKTIN_API_ROLE_ID=${V_PEKTIN_API_ROLE_ID}
+            - V_PEKTIN_API_SECRET_ID=${V_PEKTIN_API_SECRET_ID}
             - R_PEKTIN_API_PASSWORD=${R_PEKTIN_API_PASSWORD}
         networks:
             - vault

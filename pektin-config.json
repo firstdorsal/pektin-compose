@@ -3,11 +3,13 @@
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
     "vaultSubDomain": "vault.pektin",
-    "uiEnabled": true,
+    "enableUi": true,
+    "enableApi": true,
     "autoRotate": true,
     "autoCertificates": true,
     "autoConfigureMainDomain": true,
-    "dev": true,
-    "proxy": "traefik",
-    "createProxy": true
+    "dev": false,
+    "proxyConfig": "traefik",
+    "createProxy": true,
+    "buildFromSource": false
 }

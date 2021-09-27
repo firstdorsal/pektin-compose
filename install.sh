@@ -1,7 +1,8 @@
 # remove old containers and volumes in development environment
-if [[ $1 -eq deleteOld ]]
+if [[ $1 = "delete-old" ]]
 then
 #dev
+echo "test"
 docker rm pektin-vault --force -v
 docker volume rm pektin-compose_vault
 fi
