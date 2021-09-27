@@ -12,7 +12,7 @@ services:
             - rp
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock:ro
-            - ../config/letsencrypt:/letsencrypt
+            - ../secrets/letsencrypt:/letsencrypt
             - ../config/traefik/traefik.yml:/traefik/traefik.yaml
         command:
             - --providers.docker=true
@@ -23,7 +23,7 @@ services:
             - --entrypoints.websecure.enablehttp3=true
             - --certificatesresolvers.default.acme.dnschallenge=true
             - --certificatesresolvers.default.acme.dnschallenge.provider=pdns
-            - --certificatesresolvers.default.acme.email=letsencrypt@y.gy
+            - --certificatesresolvers.default.acme.email=${LETSENCRYPT_EMAIL}
             - --certificatesresolvers.default.acme.storage=/letsencrypt/acme.json
             - --providers.file.filename=/traefik/traefik.yaml
         labels:

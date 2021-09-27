@@ -167,14 +167,16 @@ export const envSetValues = async v => {
         ["UI_SUBDOMAIN", v.pektinConfig.uiSubDomain],
         ["API_SUBDOMAIN", v.pektinConfig.apiSubDomain],
         ["VAULT_SUBDOMAIN", v.pektinConfig.vaultSubDomain],
+        ["LETSENCRYPT_EMAIL", v.pektinConfig.letsencryptEmail],
         ["CSP_CONNECT_SRC", CSP_CONNECT_SRC]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
     repls.forEach(repl => {
         file = file += `${repl[0]}="${repl[1]}"\n`;
     });
-    await fs.writeFile(path.join(dir, "compose", ".env"), file);
+    await fs.writeFile(path.join(dir, "secrets", ".env"), file);
 };
+
 export const setRedisPasswordHashes = async repls => {
     let file = await fs.readFile(path.join(dir, "config", "redis", "users.template.acl"), { encoding: "UTF-8" });
 
@@ -183,13 +185,14 @@ export const setRedisPasswordHashes = async repls => {
     repls.forEach(repl => {
         file = file.replaceAll(RegExp(`${repl[0]}_SHA256$`, "gm"), `${hash(repl[1])}`);
     });
-    await fs.writeFile(path.join(dir, "config", "redis", "users.acl"), file);
+    await fs.mkdir(path.join(dir, "secrets", "redis")).catch(() => {});
+    await fs.writeFile(path.join(dir, "secrets", "redis", "users.acl"), file);
     crypto.create;
 };
 
 export const buildFromSource = async pektinConfig => {
-    await fs.mkdir(path.join(dir, "compose", "src")).catch(() => {});
-    const src = path.join(dir, "compose", "src");
+    await fs.mkdir(path.join(dir, "pektin-compose", "src")).catch(() => {});
+    const src = path.join(dir, "pektin-compose", "src");
     const clone = `git clone https://github.com/pektin-dns/`;
 
     await exec(`${clone}pektin-server ${path.join(src, "pektin-server")}`);
@@ -198,13 +201,35 @@ export const buildFromSource = async pektinConfig => {
 };
 
 export const createStartScript = async pektinConfig => {
-    let file = `#!/bin/sh \n`;
-    file += `docker-compose -f compose/pektin.yml`;
-    if (pektinConfig.buildFromSource) file += ` -f compose/build-from-source.yml `;
-    if (pektinConfig.proxyConfig === "traefik") file += ` -f compose/traefik-config.yml `;
+    let file = `#!/bin/sh\n`;
+    // create pektin compose command with different options
+    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
+    if (pektinConfig.dev) composeCommand += ` -f pektin-compose/dev.yml`;
+    if (pektinConfig.buildFromSource) composeCommand += ` -f pektin-compose/build-from-source.yml`;
+    if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik-config.yml`;
     if (pektinConfig.createProxy === true) {
-        if (pektinConfig.proxyConfig === "traefik") file += ` -f compose/traefik.yml `;
+        if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik.yml`;
     }
-    file += `up -d`;
+    composeCommand += ` up -d`;
+
+    // create start script
+    // start vault
+    file += `${composeCommand} vault\n`;
+    // run pektin-start
+    file += `docker run --name pektin-compose-start --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/start/)\n`;
+    // remove pektin-start artifacts
+    file += `docker rm pektin-compose-start -v\n`;
+    // compose up everything
+    file += composeCommand;
+
     await fs.writeFile(path.join(dir, "start.sh"), file);
+};
+
+export const createStopScript = async pektinConfig => {
+    let file = `#!/bin/sh\n`;
+    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
+    composeCommand += ` down`;
+    file += composeCommand;
+
+    await fs.writeFile(path.join(dir, "stop.sh"), file);
 };

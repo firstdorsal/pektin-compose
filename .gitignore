@@ -1,5 +1,6 @@
 *.env
 config/redis/users.acl
-ui-access.json
+secrets
 start.sh
+stop.sh
 compose/src

@@ -42,6 +42,7 @@ services:
         volumes:
             - db:/var/lib/redis
             - ../config/redis/:/usr/local/etc/redis/
+            - ../secrets/redis/users.acl:/usr/local/etc/redis/users.acl
         networks:
             - db
         command: "redis-server /usr/local/etc/redis/redis.conf"

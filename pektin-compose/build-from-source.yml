@@ -6,3 +6,5 @@ services:
         build: ./src/pektin-api
     server:
         build: ./src/pektin-server
+    rotate:
+        build: ./src/pektin-rotate

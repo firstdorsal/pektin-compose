@@ -5,6 +5,9 @@ const dir = "/pektin-compose/";
 
 const pektinConfig = JSON.parse(await fs.readFile(path.join(dir, "pektin-config.json")));
 
+// creates secrets directory
+await fs.mkdir(path.join(dir, "secrets")).catch(() => {});
+
 // init vault
 const vaultTokens = await l.getVaultTokens();
 await l.unsealVault(vaultTokens.key);
@@ -40,7 +43,7 @@ if (pektinConfig.enableUi) {
         "v-pektin-high-privilege-client",
         pektinUiConnectionConfig.password
     );
-    await fs.writeFile(path.join(dir, "ui-access.json"), JSON.stringify(pektinUiConnectionConfig));
+    await fs.writeFile(path.join(dir, "secrets", "ui-access.json"), JSON.stringify(pektinUiConnectionConfig));
 }
 // set the pektin config on vault for easy service discovery
 await l.updatePektinConfig(vaultTokens.rootToken, pektinConfig);
@@ -66,3 +69,4 @@ await l.envSetValues({
 if (pektinConfig.buildFromSource) await l.buildFromSource(pektinConfig);
 
 await l.createStartScript(pektinConfig);
+await l.createStopScript(pektinConfig);
