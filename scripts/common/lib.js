@@ -153,7 +153,7 @@ export const randomString = (length = 100) => crypto.randomBytes(length).toStrin
 
 const addAllowedConnectSources = connectSources => {
     const sources = ["https://dns.google", "https://cloudflare-dns.com"];
-    sources.forEach(e => (connectSources += e + " "));
+    sources.forEach(e => (connectSources += " " + e));
     return connectSources;
 };
 
