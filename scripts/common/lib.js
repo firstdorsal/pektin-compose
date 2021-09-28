@@ -156,7 +156,7 @@ export const envSetValues = async v => {
     if (v.pektinConfig.dev === "local") {
         CSP_CONNECT_SRC = `*`;
     } else if (v.pektinConfig.dev === "insecure-online") {
-        CSP_CONNECT_SRC = `http://${v.insecureDevIp}:3001 http://${v.insecureDevIp}:8200`;
+        CSP_CONNECT_SRC = `http://${v.pektinConfig.insecureDevIp}:3001 http://${v.pektinConfig.insecureDevIp}:8200`;
     } else {
         CSP_CONNECT_SRC = `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
     }

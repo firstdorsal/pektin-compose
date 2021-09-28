@@ -8,6 +8,7 @@ echo "deleting old artifacts"
 docker-compose -f pektin-compose/pektin.yml down
 docker rm pektin-vault --force -v
 docker volume rm pektin-compose_vault
+docker-compose -f pektin-compose/pektin.yml pull
 fi
 
 # start vault
