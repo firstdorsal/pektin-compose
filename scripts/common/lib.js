@@ -151,6 +151,12 @@ export const getVaultTokens = async () => {
 
 export const randomString = (length = 100) => crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
 
+const addAllowedConnectSources = connectSources => {
+    const sources = ["https://dns.google", "https://cloudflare-dns.com"];
+    sources.forEach(e => (connectSources += e + " "));
+    return connectSources;
+};
+
 export const envSetValues = async v => {
     let CSP_CONNECT_SRC = "";
     if (v.pektinConfig.dev === "local") {
@@ -160,6 +166,7 @@ export const envSetValues = async v => {
     } else {
         CSP_CONNECT_SRC = `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
     }
+    CSP_CONNECT_SRC = addAllowedConnectSources(CSP_CONNECT_SRC);
 
     const repls = [
         ["V_PEKTIN_API_ROLE_ID", v.role_id],
