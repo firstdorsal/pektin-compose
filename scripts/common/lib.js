@@ -6,7 +6,7 @@ import path from "path";
 import { promisify } from "util";
 import { exec as exec_default } from "child_process";
 
-const vaultUrl = "http://pektin-vault:8200";
+const internalVaultUrl = "http://pektin-vault:8200";
 const dir = "/pektin-compose/";
 const exec = promisify(exec_default);
 
@@ -16,13 +16,13 @@ export const error = error => {
 };
 
 export const updatePektinConfig = async (vaultToken, config) => {
-    await f(`${vaultUrl}/v1/pektin-kv/metadata/pektin-config`, {
+    await f(`${internalVaultUrl}/v1/pektin-kv/metadata/pektin-config`, {
         method: "DELETE",
         headers: {
             "X-Vault-Token": vaultToken
         }
     });
-    await f(`${vaultUrl}/v1/pektin-kv/data/pektin-config`, {
+    await f(`${internalVaultUrl}/v1/pektin-kv/data/pektin-config`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -34,7 +34,7 @@ export const updatePektinConfig = async (vaultToken, config) => {
 };
 
 export const enableCors = async vaultToken => {
-    await f(`${vaultUrl}/v1/sys/config/cors`, {
+    await f(`${internalVaultUrl}/v1/sys/config/cors`, {
         method: "PUT",
         headers: {
             "X-Vault-Token": vaultToken
@@ -47,7 +47,7 @@ export const enableCors = async vaultToken => {
 };
 
 export const createUserPassAccount = async (vaultToken, name, policies, password) => {
-    await f(path.join(vaultUrl, "/v1/auth/userpass/users/", name), {
+    await f(path.join(internalVaultUrl, "/v1/auth/userpass/users/", name), {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -58,7 +58,7 @@ export const createUserPassAccount = async (vaultToken, name, policies, password
 
 export const createAppRole = async (vaultToken, name, policies) => {
     // create role
-    await f(path.join(vaultUrl, "/v1/auth/approle/role/", name), {
+    await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name), {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -66,14 +66,14 @@ export const createAppRole = async (vaultToken, name, policies) => {
         body: JSON.stringify({ policies })
     });
     // get role id
-    const roleIdRes = await await f(path.join(vaultUrl, "/v1/auth/approle/role/", name, "role-id"), {
+    const roleIdRes = await await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "role-id"), {
         headers: {
             "X-Vault-Token": vaultToken
         }
     });
     const roleIdParsed = await roleIdRes.json();
     // get secret
-    const secretIdRes = await f(path.join(vaultUrl, "/v1/auth/approle/role/", name, "secret-id"), {
+    const secretIdRes = await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "secret-id"), {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -85,7 +85,7 @@ export const createAppRole = async (vaultToken, name, policies) => {
 };
 
 export const enableSecretEngine = async (vaultToken, enginePath, engineOptions) => {
-    const vaultRes = await f(path.join(vaultUrl, "/v1/sys/mounts", enginePath), {
+    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/mounts", enginePath), {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -96,7 +96,7 @@ export const enableSecretEngine = async (vaultToken, enginePath, engineOptions) 
 };
 
 export const enableAuthMethod = async (vaultToken, type) => {
-    const vaultRes = await f(path.join(vaultUrl, "/v1/sys/auth", type), {
+    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/auth", type), {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -120,7 +120,7 @@ export const createVaultPolicies = async vaultToken => {
 };
 
 export const createVaultPolicy = async (vaultToken, policyName, policy) => {
-    const vaultRes = await f(path.join(vaultUrl, "v1/sys/policies/acl", policyName), {
+    const vaultRes = await f(path.join(internalVaultUrl, "v1/sys/policies/acl", policyName), {
         method: "PUT",
         headers: {
             "X-Vault-Token": vaultToken
@@ -132,7 +132,7 @@ export const createVaultPolicy = async (vaultToken, policyName, policy) => {
 };
 
 export const unsealVault = async key => {
-    const vaultRes = await f(path.join(vaultUrl, "/v1/sys/unseal"), {
+    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/unseal"), {
         method: "PUT",
         body: JSON.stringify({ key })
     });
@@ -140,7 +140,7 @@ export const unsealVault = async key => {
 };
 
 export const getVaultTokens = async () => {
-    const vaultRes = await f(path.join(vaultUrl, "/v1/sys/init"), {
+    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/init"), {
         method: "PUT",
         body: JSON.stringify({ secret_shares: 1, secret_threshold: 1 })
     });
@@ -152,9 +152,14 @@ export const getVaultTokens = async () => {
 export const randomString = (length = 100) => crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
 
 export const envSetValues = async v => {
-    const CSP_CONNECT_SRC = v.pektinConfig.dev
-        ? `*`
-        : `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
+    let CSP_CONNECT_SRC = "";
+    if (v.pektinConfig.dev === "local") {
+        CSP_CONNECT_SRC = `*`;
+    } else if (v.pektinConfig.dev === "insecure-online") {
+        CSP_CONNECT_SRC = `http://${v.insecureDevIp}:3001 http://${v.insecureDevIp}:8200`;
+    } else {
+        CSP_CONNECT_SRC = `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
+    }
 
     const repls = [
         ["V_PEKTIN_API_ROLE_ID", v.role_id],
@@ -204,7 +209,8 @@ export const createStartScript = async pektinConfig => {
     let file = `#!/bin/sh\n`;
     // create pektin compose command with different options
     let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
-    if (pektinConfig.dev) composeCommand += ` -f pektin-compose/dev.yml`;
+    if (pektinConfig.dev === "insecure-online") composeCommand += ` -f pektin-compose/insecure-online-dev.yml`;
+    if (pektinConfig.dev === "local") composeCommand += ` -f pektin-compose/local-dev.yml`;
     if (pektinConfig.buildFromSource) composeCommand += ` -f pektin-compose/build-from-source.yml`;
     if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik-config.yml`;
     if (pektinConfig.createProxy === true) {

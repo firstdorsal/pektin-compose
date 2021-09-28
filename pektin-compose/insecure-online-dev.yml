@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+    vault:
+        labels:
+            - 8200:8200
+    ui:
+        labels:
+            - 8080:80
+    api:
+        labels:
+            - 3001:80
+    server:
+        ports:
+            - 53:53/udp
+            - 53:53/tcp

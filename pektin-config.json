@@ -17,5 +17,6 @@
     "createProxy": false,
 
     "buildFromSource": false,
-    "dev": true
+    "dev": "insecure-online",
+    "insecureDevIp": "1.1.1.1"
 }

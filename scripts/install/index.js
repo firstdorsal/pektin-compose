@@ -25,9 +25,14 @@ const { role_id, secret_id } = await l.createAppRole(vaultTokens.rootToken, "v-p
 
 if (pektinConfig.enableUi) {
     // create ui account and access config for it
-    const vaultEndpoint = pektinConfig.dev
-        ? `http://127.0.0.1:8200`
-        : `https://${pektinConfig.vaultSubDomain}.${pektinConfig.domain}`;
+    let vaultEndpoint = "";
+    if (pektinConfig.dev === "local") {
+        vaultEndpoint = `http://127.0.0.1:8200`;
+    } else if (pektinConfig.dev === "insecure-online") {
+        vaultEndpoint = `http://${pektinConfig.insecureDevIp}:8200`;
+    } else {
+        vaultEndpoint = `https://${pektinConfig.vaultSubDomain}.${pektinConfig.domain}`;
+    }
 
     const pektinUiConnectionConfig = {
         username: `ui-${l.randomString(10)}`,
