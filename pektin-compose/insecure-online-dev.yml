@@ -1,13 +1,13 @@
 version: "3.7"
 services:
     vault:
-        labels:
+        ports:
             - 8200:8200
     ui:
-        labels:
+        ports:
             - 8080:80
     api:
-        labels:
+        ports:
             - 3001:80
     server:
         ports:
