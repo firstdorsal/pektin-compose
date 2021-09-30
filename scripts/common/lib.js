@@ -246,3 +246,13 @@ export const createStopScript = async pektinConfig => {
 
     await fs.writeFile(path.join(dir, "stop.sh"), file);
 };
+
+export const createUpdateScript = async pektinConfig => {
+    let file = `#!/bin/sh\n`;
+    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
+    composeCommand += ` pull`;
+
+    file += composeCommand + "\n";
+    file += `bash start.sh`;
+    await fs.writeFile(path.join(dir, "update.sh"), file);
+};

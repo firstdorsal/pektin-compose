@@ -75,3 +75,4 @@ if (pektinConfig.buildFromSource) await l.buildFromSource(pektinConfig);
 
 await l.createStartScript(pektinConfig);
 await l.createStopScript(pektinConfig);
+await l.createUpdateScript(pektinConfig);
