@@ -9,6 +9,9 @@ services:
     api:
         ports:
             - 3001:80
+    redis:
+        ports:
+            - 6379:6379
     server:
         ports:
             - 53:53/udp
