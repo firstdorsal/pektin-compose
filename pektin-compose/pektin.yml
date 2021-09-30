@@ -7,8 +7,9 @@ services:
         cap_add:
             - IPC_LOCK
         volumes:
-            - vault:/vault/data/
+            - vault:/vault/file/
             - ../config/vault/:/vault/config/
+            - ../logs/vault/:/vault/logs
         command: server
         networks:
             - vault
@@ -40,7 +41,7 @@ services:
         container_name: pektin-redis
         restart: always
         volumes:
-            - db:/var/lib/redis
+            - db:/data
             - ../config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
             - ../secrets/redis/users.acl:/usr/local/etc/redis/users.acl:ro
         networks:

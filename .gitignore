@@ -3,4 +3,5 @@ config/redis/users.acl
 secrets
 start.sh
 stop.sh
+update.sh
 compose/src
