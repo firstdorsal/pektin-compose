@@ -224,6 +224,7 @@ export const createStartScript = async pektinConfig => {
         if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik.yml`;
     }
     composeCommand += ` up -d`;
+    composeCommand += pektinConfig.buildFromSource ? " --build" : "";
 
     // create start script
     // start vault
