@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 import * as l from "/pektin-compose/scripts/common/lib.js";
+import { config } from "dotenv";
+config();
 const dir = "/pektin-compose/";
 
 const pektinConfig = JSON.parse(await fs.readFile(path.join(dir, "pektin-config.json")));
@@ -76,3 +78,14 @@ if (pektinConfig.buildFromSource) await l.buildFromSource(pektinConfig);
 await l.createStartScript(pektinConfig);
 await l.createStopScript(pektinConfig);
 await l.createUpdateScript(pektinConfig);
+
+// change ownership of all created files to host user
+// also chmod 700 all secrets except for redis ACL
+await l.chownRecursive(path.join(dir, `pektin-compose`, `src`), process.env.UID, process.env.GID);
+await l.chown(path.join(dir, `start.sh`), process.env.UID, process.env.GID);
+await l.chown(path.join(dir, `stop.sh`), process.env.UID, process.env.GID);
+await l.chown(path.join(dir, `update.sh`), process.env.UID, process.env.GID);
+await l.chownRecursive(path.join(dir, `secrets`), process.env.UID, process.env.GID);
+await l.chmod(path.join(dir, `secrets`), `700`);
+await l.chmod(path.join(dir, `secrets`, `.env`), `700`);
+await l.chmod(path.join(dir, `secrets`, `ui-access.json`), `700`);

@@ -15,6 +15,18 @@ export const error = error => {
     exit(1);
 };
 
+export const chmod = async (path, perms) => {
+    await exec(`chmod ${perms} ${path}`);
+};
+
+export const chown = async (path, uid, gid) => {
+    await exec(`chown ${uid}:${gid} ${path}`);
+};
+
+export const chownRecursive = async (path, uid, gid) => {
+    await exec(`chown -R ${uid}:${gid} ${path}`);
+};
+
 export const updatePektinConfig = async (vaultToken, config) => {
     await f(`${internalVaultUrl}/v1/pektin-kv/metadata/pektin-config`, {
         method: "DELETE",
