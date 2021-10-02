@@ -9,16 +9,16 @@ docker-compose -f pektin-compose/pektin.yml down
 docker rm pektin-vault --force -v
 docker volume rm pektin-compose_vault
 docker-compose -f pektin-compose/pektin.yml pull
-rm -rf pektin-compose/src/
+rm -rf update.sh start.sh stop.sh secrets/ pektin-compose/src/
 fi
 
 # start vault
 docker-compose -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
-docker run --name pektin-compose-install --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/install/)
+docker run --user $(id -u):$(id -g) --name pektin-compose-install --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/install/)
 
-chown $USER:$(id -g -n) pektin-compose/ -R
+chmod 700 secrets/ -R
 
 # clean up pektin-install
 docker rm pektin-compose-install -v
