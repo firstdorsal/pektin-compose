@@ -15,7 +15,7 @@ services:
             - --entrypoints.web.address=:80
     recursor:
         image: mvance/unbound:1.13.2
-        container_name: recursor
+        container_name: pektin-recursor
         restart: always
         volumes:
             - ../config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
@@ -27,11 +27,13 @@ services:
             traefik.http.routers.pektin-recursor.entrypoints: "web"
             traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"
             traefik.http.services.pektin-recursor.loadbalancer.server.scheme: "h2c"
-
-            # set cors
             traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-cors@docker
+            traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-auth@docker
+            # enable cors
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolalloworiginlist: "*"
+            # add auth
+            traefik.http.middlewares.pektin-recursor-auth.basicauth.users: ${RECURSOR_AUTH}
 
 networks:
     rp:

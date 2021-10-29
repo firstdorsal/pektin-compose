@@ -5,7 +5,7 @@ if [[ $1 = "delete-old" ]]
 then
 echo "deleting old artifacts"
 #sudo rm -rf secrets
-docker-compose -f pektin-compose/pektin.yml down
+docker-compose -f pektin-compose/pektin.yml down --remove-orphans
 docker rm pektin-vault --force -v
 docker volume rm pektin-compose_vault pektin-compose_db
 docker-compose -f pektin-compose/pektin.yml pull

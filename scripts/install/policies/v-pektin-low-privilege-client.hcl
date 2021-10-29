@@ -6,3 +6,7 @@ path "pektin-kv/data/gss_token" {
 path "pektin-kv/data/pektin-config" {
   capabilities = ["read"]
 }
+# every client has access to the recursor auth
+path "pektin-kv/data/recursor-auth" {
+  capabilities = ["read"]
+}

@@ -7,6 +7,10 @@ path "pektin-kv/data/gssr_token" {
 path "pektin-kv/data/pektin-config" {
   capabilities = ["read"]
 }
+# every client has access to the recursor auth
+path "pektin-kv/data/recursor-auth" {
+  capabilities = ["read"]
+}
 
 # the pektin-rotate-client has full access to all foreign api secrets
 path "pektin-kv/data/foreign-apis" {

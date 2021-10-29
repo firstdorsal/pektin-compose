@@ -6,6 +6,10 @@ path "pektin-kv/data/gss_token" {
 path "pektin-kv/data/pektin-config" {
   capabilities = ["read"]
 }
+# every client has access to the recursor auth
+path "pektin-kv/data/recursor-auth" {
+  capabilities = ["read"]
+}
 
 # the high-privilege-client has full access to all foreign api secrets
 path "pektin-kv/data/foreign-apis" {
