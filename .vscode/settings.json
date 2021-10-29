@@ -1,0 +1,8 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": ["pektin-config.json"],
+            "url": "./.schema/pektin-config.schema.json"
+        }
+    ]
+}

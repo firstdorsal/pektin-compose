@@ -27,20 +27,20 @@ export const chownRecursive = async (path, uid, gid) => {
     await exec(`chown -R ${uid}:${gid} ${path}`);
 };
 
-export const updatePektinConfig = async (vaultToken, config) => {
-    await f(`${internalVaultUrl}/v1/pektin-kv/metadata/pektin-config`, {
+export const updatePektinKvValue = async (vaultToken, key, data) => {
+    await f(`${internalVaultUrl}/v1/pektin-kv/metadata/${key}`, {
         method: "DELETE",
         headers: {
             "X-Vault-Token": vaultToken
         }
     });
-    await f(`${internalVaultUrl}/v1/pektin-kv/data/pektin-config`, {
+    await f(`${internalVaultUrl}/v1/pektin-kv/data/${key}`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
         },
         body: JSON.stringify({
-            data: config
+            data
         })
     });
 };
@@ -78,19 +78,25 @@ export const createAppRole = async (vaultToken, name, policies) => {
         body: JSON.stringify({ policies })
     });
     // get role id
-    const roleIdRes = await await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "role-id"), {
-        headers: {
-            "X-Vault-Token": vaultToken
+    const roleIdRes = await await f(
+        path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "role-id"),
+        {
+            headers: {
+                "X-Vault-Token": vaultToken
+            }
         }
-    });
+    );
     const roleIdParsed = await roleIdRes.json();
     // get secret
-    const secretIdRes = await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "secret-id"), {
-        method: "POST",
-        headers: {
-            "X-Vault-Token": vaultToken
+    const secretIdRes = await f(
+        path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "secret-id"),
+        {
+            method: "POST",
+            headers: {
+                "X-Vault-Token": vaultToken
+            }
         }
-    });
+    );
     const secretIdParsed = await secretIdRes.json();
 
     return { role_id: roleIdParsed.data.role_id, secret_id: secretIdParsed.data.secret_id };
@@ -120,14 +126,20 @@ export const enableAuthMethod = async (vaultToken, type) => {
 
 export const createVaultPolicies = async vaultToken => {
     return await Promise.all(
-        ["v-pektin-api", "v-pektin-low-privilege-client", "v-pektin-high-privilege-client", "v-pektin-rotate-client"].map(
-            async policyName => {
-                const policy = await fs.readFile(path.join(dir, "scripts/install/policies", policyName + ".hcl"), {
+        [
+            "v-pektin-api",
+            "v-pektin-low-privilege-client",
+            "v-pektin-high-privilege-client",
+            "v-pektin-rotate-client"
+        ].map(async policyName => {
+            const policy = await fs.readFile(
+                path.join(dir, "scripts/install/policies", policyName + ".hcl"),
+                {
                     encoding: "UTF-8"
-                });
-                return createVaultPolicy(vaultToken, policyName, policy);
-            }
-        )
+                }
+            );
+            return createVaultPolicy(vaultToken, policyName, policy);
+        })
     );
 };
 
@@ -161,7 +173,8 @@ export const getVaultTokens = async () => {
     return { key: vaultTokens.keys[0], rootToken: vaultTokens.root_token };
 };
 
-export const randomString = (length = 100) => crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
+export const randomString = (length = 100) =>
+    crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
 
 const addAllowedConnectSources = connectSources => {
     const sources = ["https://dns.google", "https://cloudflare-dns.com"];
@@ -192,7 +205,8 @@ export const envSetValues = async v => {
         ["API_SUBDOMAIN", v.pektinConfig.apiSubDomain],
         ["VAULT_SUBDOMAIN", v.pektinConfig.vaultSubDomain],
         ["LETSENCRYPT_EMAIL", v.pektinConfig.letsencryptEmail],
-        ["CSP_CONNECT_SRC", CSP_CONNECT_SRC]
+        ["CSP_CONNECT_SRC", CSP_CONNECT_SRC],
+        ["RECURSOR_AUTH", v.recursorBasicAuthHashed]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
     repls.forEach(repl => {
@@ -202,7 +216,9 @@ export const envSetValues = async v => {
 };
 
 export const setRedisPasswordHashes = async repls => {
-    let file = await fs.readFile(path.join(dir, "config", "redis", "users.template.acl"), { encoding: "UTF-8" });
+    let file = await fs.readFile(path.join(dir, "config", "redis", "users.template.acl"), {
+        encoding: "UTF-8"
+    });
 
     const hash = a => crypto.createHash("sha256").update(a, "utf8").digest().toString("hex");
 
@@ -228,12 +244,31 @@ export const createStartScript = async pektinConfig => {
     let file = `#!/bin/sh\n`;
     // create pektin compose command with different options
     let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
-    if (pektinConfig.dev === "insecure-online") composeCommand += ` -f pektin-compose/insecure-online-dev.yml`;
-    if (pektinConfig.dev === "local") composeCommand += ` -f pektin-compose/local-dev.yml`;
-    if (pektinConfig.buildFromSource) composeCommand += ` -f pektin-compose/build-from-source.yml`;
-    if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik-config.yml`;
+
+    if (pektinConfig.dev === "insecure-online") {
+        composeCommand += ` -f pektin-compose/insecure-online-dev.yml`;
+    }
+    if (pektinConfig.dev === "local") {
+        composeCommand += ` -f pektin-compose/local-dev.yml`;
+        if (pektinConfig.enableRecursor) {
+            composeCommand += ` -f pektin-compose/recursor-dev.yml`;
+        }
+    } else {
+        if (pektinConfig.enableRecursor) {
+            composeCommand += ` -f pektin-compose/recursor.yml`;
+        }
+    }
+
+    if (pektinConfig.buildFromSource) {
+        composeCommand += ` -f pektin-compose/build-from-source.yml`;
+    }
+    if (pektinConfig.proxyConfig === "traefik") {
+        composeCommand += ` -f pektin-compose/traefik-config.yml`;
+    }
     if (pektinConfig.createProxy === true) {
-        if (pektinConfig.proxyConfig === "traefik") composeCommand += ` -f pektin-compose/traefik.yml`;
+        if (pektinConfig.proxyConfig === "traefik") {
+            composeCommand += ` -f pektin-compose/traefik.yml`;
+        }
     }
     composeCommand += ` up -d`;
     composeCommand += pektinConfig.buildFromSource ? " --build" : "";
@@ -268,4 +303,14 @@ export const createUpdateScript = async pektinConfig => {
     file += composeCommand + "\n";
     file += `bash start.sh`;
     await fs.writeFile(path.join(dir, "update.sh"), file);
+};
+
+export const genBasicAuthHashed = (username, password) => {
+    const hash = a => crypto.createHash("sha1").update(a, "utf8").digest().toString("base64");
+    return `${username}:{SHA}${hash(password)}`;
+};
+
+export const genBasicAuthString = (username, password) => {
+    const s = Buffer.from(`${username}:${password}`).toString("base64");
+    return `Basic ${s}`;
 };

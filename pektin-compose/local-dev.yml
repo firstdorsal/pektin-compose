@@ -9,6 +9,8 @@ services:
     api:
         ports:
             - 127.0.0.1:3001:80
+        environment:
+            DISABLE_AUTH: $DISABLE_AUTH
     redis:
         ports:
             - 127.0.0.1:6379:6379

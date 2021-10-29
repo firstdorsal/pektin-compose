@@ -20,10 +20,17 @@ await l.createVaultPolicies(vaultTokens.rootToken);
 await l.enableAuthMethod(vaultTokens.rootToken, "approle");
 await l.enableAuthMethod(vaultTokens.rootToken, "userpass");
 
-await l.enableSecretEngine(vaultTokens.rootToken, "pektin-kv", { type: "kv", options: { version: 2 } });
+await l.enableSecretEngine(vaultTokens.rootToken, "pektin-kv", {
+    type: "kv",
+    options: { version: 2 }
+});
 await l.enableSecretEngine(vaultTokens.rootToken, "pektin-transit", { type: "transit" });
 
-const { role_id, secret_id } = await l.createAppRole(vaultTokens.rootToken, "v-pektin-api", "v-pektin-api");
+const { role_id, secret_id } = await l.createAppRole(
+    vaultTokens.rootToken,
+    "v-pektin-api",
+    "v-pektin-api"
+);
 
 if (pektinConfig.enableUi) {
     // create ui account and access config for it
@@ -50,10 +57,23 @@ if (pektinConfig.enableUi) {
         "v-pektin-high-privilege-client",
         pektinUiConnectionConfig.password
     );
-    await fs.writeFile(path.join(dir, "secrets", "ui-access.json"), JSON.stringify(pektinUiConnectionConfig));
+    await fs.writeFile(
+        path.join(dir, "secrets", "ui-access.json"),
+        JSON.stringify(pektinUiConnectionConfig)
+    );
 }
+
+// create basic auth for recursor
+const RECURSOR_USER = l.randomString(20);
+const RECURSOR_PASSWORD = l.randomString();
+const recursorBasicAuthHashed = l.genBasicAuthHashed(RECURSOR_USER, RECURSOR_PASSWORD);
+// set recursor basic auth string on vault
+await l.updatePektinKvValue(vaultTokens.rootToken, "recursor-auth", {
+    basicAuth: l.genBasicAuthString(RECURSOR_USER, RECURSOR_PASSWORD)
+});
+
 // set the pektin config on vault for easy service discovery
-await l.updatePektinConfig(vaultTokens.rootToken, pektinConfig);
+await l.updatePektinKvValue(vaultTokens.rootToken, "pektin-config", pektinConfig);
 
 // init redis access control
 const R_PEKTIN_API_PASSWORD = l.randomString();
@@ -70,7 +90,8 @@ await l.envSetValues({
     R_PEKTIN_SERVER_PASSWORD,
     role_id,
     secret_id,
-    pektinConfig
+    pektinConfig,
+    recursorBasicAuthHashed
 });
 
 if (pektinConfig.buildFromSource) await l.buildFromSource(pektinConfig);

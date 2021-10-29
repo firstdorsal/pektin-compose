@@ -1,0 +1,76 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Pektin Config",
+    "description": "A pektin configuration",
+    "type": "object",
+    "required": ["domain"],
+    "properties": {
+        "domain": {
+            "type": "string",
+            "description": "The main domain you want to use for your DNS server, api etc."
+        },
+        "uiSubDomain": {
+            "type": "string",
+            "description": "The subdomain you want to use for accessing the user interface (if enabled)"
+        },
+        "apiSubDomain": {
+            "type": "string",
+            "description": "The subdomain you want to use for accessing Pektin API (if enabled)"
+        },
+        "vaultSubDomain": {
+            "type": "string",
+            "description": "The subdomain you want to use for accessing vault"
+        },
+        "recursorDomain": {
+            "type": "string",
+            "description": "The subdomain you want to use for accessing the recursor (if enabled)"
+        },
+
+        "enableUi": { "type": "boolean", "description": "Whether or not to enable the UI" },
+        "enableApi": { "type": "boolean", "description": "Whether or not to enable the API" },
+        "enableRecursor": {
+            "type": "boolean",
+            "description": "Whether or not to enable the private recursor"
+        },
+
+        "enableRotate": {
+            "type": "boolean",
+            "description": "Whether or not to auto rotate dns keys at the registrar"
+        },
+        "createCerts": {
+            "type": "boolean",
+            "description": "Whether or not to create certificates for the domains hosted on pektin"
+        },
+        "letsencryptEmail": {
+            "type": "string",
+            "description": "required if createCerts is true"
+        },
+
+        "autoConfigureMainDomain": {
+            "type": "boolean",
+            "description": "Use registrar API to auto configure the necessary glue and ns records for your main domain"
+        },
+
+        "proxyConfig": {
+            "enum": ["none", "traefik"],
+            "description": "what proxy config to apply to the containers"
+        },
+        "createProxy": {
+            "type": "boolean",
+            "description": "whether or not to create the proxy container itself"
+        },
+
+        "buildFromSource": {
+            "type": "boolean",
+            "description": "whether or not to build the pektin containers from source"
+        },
+        "dev": {
+            "enum": ["local", "insecure-online"],
+            "description": "Whether or not to run in development mode and in what dev mode"
+        },
+        "insecureDevIp": {
+            "type": "string",
+            "description": "the ip you want to use for the dev server if running in 'insecure-online' dev mode"
+        }
+    }
+}

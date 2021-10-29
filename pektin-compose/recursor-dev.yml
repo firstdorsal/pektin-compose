@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+    rp:
+        container_name: rp
+        image: traefik
+        restart: always
+        ports:
+            - 80:80
+        networks:
+            - rp
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        command:
+            - --providers.docker=true
+            - --entrypoints.web.address=:80
+    recursor:
+        image: mvance/unbound:1.13.2
+        container_name: recursor
+        restart: always
+        volumes:
+            - ../config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+        networks:
+            - rp
+        labels:
+            traefik.enable: "true"
+            traefik.http.routers.pektin-recursor.rule: "PathPrefix(`/dns-query`)"
+            traefik.http.routers.pektin-recursor.entrypoints: "web"
+            traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"
+            traefik.http.services.pektin-recursor.loadbalancer.server.scheme: "h2c"
+
+            # set cors
+            traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-cors@docker
+            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST
+            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolalloworiginlist: "*"
+
+networks:
+    rp:
+        name: rp

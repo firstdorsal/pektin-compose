@@ -3,12 +3,14 @@
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
     "vaultSubDomain": "vault.pektin",
+    "recursorDomain": "recursor.pektin",
 
     "enableUi": true,
     "enableApi": true,
+    "enableRecursor": true,
 
     "enableRotate": true,
-    "enableAutoCertificates": true,
+    "createCerts": true,
     "letsencryptEmail": "letsencrypt@example.com",
 
     "autoConfigureMainDomain": true,
@@ -16,7 +18,7 @@
     "proxyConfig": "none",
     "createProxy": false,
 
-    "buildFromSource": false,
+    "buildFromSource": true,
     "dev": "local",
     "insecureDevIp": "1.1.1.1"
 }
