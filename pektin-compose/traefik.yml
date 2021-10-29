@@ -5,9 +5,10 @@ services:
         image: traefik
         restart: always
         ports:
-            - 80:80
+            - 80:80/tcp
             - 443:443/udp
             - 443:443/tcp
+            - 853:853/tcp
         networks:
             - rp
         volumes:
@@ -26,12 +27,15 @@ services:
             - --certificatesresolvers.default.acme.email=${LETSENCRYPT_EMAIL}
             - --certificatesresolvers.default.acme.storage=/letsencrypt/acme.json
             - --providers.file.filename=/traefik/traefik.yaml
+
+            - --entrypoints.dot.address=:853
+
         labels:
             traefik.enable: "true"
-            # redirect
+            # redirect http to https
             traefik.http.routers.http-catchall.rule: "hostregexp(`{host:.+}`)"
             traefik.http.routers.http-catchall.entrypoints: "web"
-            traefik.http.routers.http-catchall.middlewares: "redirect-to-https"
+            traefik.http.routers.http-catchall.middlewares: "redirect-to-https@docker"
             traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
             traefik.http.middlewares.redirect-to-https.redirectscheme.permanent: "true"
 

@@ -30,3 +30,13 @@ services:
             traefik.http.routers.pektin-api.tls: "true"
             traefik.http.routers.pektin-api.entrypoints: "websecure"
             traefik.http.services.pektin-api.loadbalancer.server.port: "80"
+    server:
+        labels:
+            traefik.enable: "true"
+            traefik.tcp.routers.pektin-server-dot.tls.certresolver: "default"
+            traefik.tcp.routers.pektin-server-dot.tls.domains[0].main: "${DOMAIN}"
+            traefik.tcp.routers.pektin-server-dot.tls.domains[0].sans: "*.${DOMAIN}"
+            traefik.tcp.routers.pektin-server-dot.rule: "HostSNI(`${SERVER_SUBDOMAIN}.${DOMAIN}`)"
+            traefik.tcp.routers.pektin-server-dot.tls: "true"
+            traefik.tcp.routers.pektin-server-dot.entrypoints: "dot"
+            traefik.tcp.routers.pektin-server-dot.loadbalancer.server.port: "53"
