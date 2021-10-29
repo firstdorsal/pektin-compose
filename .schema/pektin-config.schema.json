@@ -1,13 +1,18 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "Pektin Config",
-    "description": "A pektin configuration",
+    "description": "Pektin configuration file specification",
     "type": "object",
-    "required": ["domain"],
+    "required": ["domain", "serverSubDomains"],
     "properties": {
         "domain": {
             "type": "string",
             "description": "The main domain you want to use for your DNS server, api etc."
+        },
+        "serverSubDomains": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "The subdomains you want to use for your nameservers"
         },
         "uiSubDomain": {
             "type": "string",
@@ -43,7 +48,7 @@
         },
         "letsencryptEmail": {
             "type": "string",
-            "description": "required if createCerts is true"
+            "description": "Required if createCerts is true"
         },
 
         "autoConfigureMainDomain": {
@@ -53,24 +58,24 @@
 
         "proxyConfig": {
             "enum": ["none", "traefik"],
-            "description": "what proxy config to apply to the containers"
+            "description": "What proxy config to apply to the containers"
         },
         "createProxy": {
             "type": "boolean",
-            "description": "whether or not to create the proxy container itself"
+            "description": "Whether or not to create the proxy container itself"
         },
 
         "buildFromSource": {
             "type": "boolean",
-            "description": "whether or not to build the pektin containers from source"
+            "description": "Whether or not to build the pektin containers from source"
         },
         "dev": {
             "enum": ["local", "insecure-online"],
-            "description": "Whether or not to run in development mode and in what dev mode"
+            "description": "Whether or not to run in development mode and if yes in what dev mode"
         },
         "insecureDevIp": {
             "type": "string",
-            "description": "the ip you want to use for the dev server if running in 'insecure-online' dev mode"
+            "description": "The ip you want to use for the dev server if running in 'insecure-online' dev mode"
         }
     }
 }

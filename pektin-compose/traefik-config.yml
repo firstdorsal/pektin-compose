@@ -36,7 +36,7 @@ services:
             traefik.tcp.routers.pektin-server-dot.tls.certresolver: "default"
             traefik.tcp.routers.pektin-server-dot.tls.domains[0].main: "${DOMAIN}"
             traefik.tcp.routers.pektin-server-dot.tls.domains[0].sans: "*.${DOMAIN}"
-            traefik.tcp.routers.pektin-server-dot.rule: "HostSNI(`${SERVER_SUBDOMAIN}.${DOMAIN}`)"
+            traefik.tcp.routers.pektin-server-dot.rule: "HostSNI(`${SERVER_DOMAINS_SNI}`)"
             traefik.tcp.routers.pektin-server-dot.tls: "true"
             traefik.tcp.routers.pektin-server-dot.entrypoints: "dot"
             traefik.tcp.routers.pektin-server-dot.loadbalancer.server.port: "53"

@@ -1,5 +1,6 @@
 {
     "domain": "example.com",
+    "serverSubDomains": ["ns1", "ns2", "ns3"],
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
     "vaultSubDomain": "vault.pektin",

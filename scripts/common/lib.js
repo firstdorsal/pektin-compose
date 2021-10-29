@@ -206,7 +206,11 @@ export const envSetValues = async v => {
         ["VAULT_SUBDOMAIN", v.pektinConfig.vaultSubDomain],
         ["LETSENCRYPT_EMAIL", v.pektinConfig.letsencryptEmail],
         ["CSP_CONNECT_SRC", CSP_CONNECT_SRC],
-        ["RECURSOR_AUTH", v.recursorBasicAuthHashed]
+        ["RECURSOR_AUTH", v.recursorBasicAuthHashed],
+        [
+            "SERVER_DOMAINS_SNI",
+            v.pektinConfig.serverSubDomains.map(n => n + "." + v.pektinConfig.domain).toString()
+        ]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
     repls.forEach(repl => {
