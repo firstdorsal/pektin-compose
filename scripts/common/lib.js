@@ -173,8 +173,9 @@ export const getVaultTokens = async () => {
     return { key: vaultTokens.keys[0], rootToken: vaultTokens.root_token };
 };
 
-export const randomString = (length = 100) =>
-    crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
+export const randomString = (length = 100) => {
+    return crypto.randomBytes(length).toString("base64url").replaceAll("=", "");
+};
 
 const addAllowedConnectSources = connectSources => {
     const sources = ["https://dns.google", "https://cloudflare-dns.com"];
@@ -209,7 +210,9 @@ export const envSetValues = async v => {
         ["RECURSOR_AUTH", v.recursorBasicAuthHashed],
         [
             "SERVER_DOMAINS_SNI",
-            v.pektinConfig.serverSubDomains.map(n => n + "." + v.pektinConfig.domain).toString()
+            v.pektinConfig.nameServers
+                .map(ns => ns.subDomain + "." + v.pektinConfig.domain)
+                .toString()
         ]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
@@ -270,7 +273,7 @@ export const createStartScript = async pektinConfig => {
         composeCommand += ` -f pektin-compose/traefik-config.yml`;
     }
     if (pektinConfig.createProxy === true) {
-        if (pektinConfig.proxyConfig === "traefik") {
+        if (pektinConfig.proxyConfig === "traefik" && pektinConfig.dev !== "local") {
             composeCommand += ` -f pektin-compose/traefik.yml`;
         }
     }

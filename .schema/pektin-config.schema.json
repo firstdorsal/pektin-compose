@@ -3,15 +3,22 @@
     "title": "Pektin Config",
     "description": "Pektin configuration file specification",
     "type": "object",
-    "required": ["domain", "serverSubDomains"],
+    "required": ["domain", "nameServers"],
     "properties": {
         "domain": {
             "type": "string",
             "description": "The main domain you want to use for your DNS server, api etc."
         },
-        "serverSubDomains": {
+        "nameServers": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+                "type": "object",
+                "properties": {
+                    "subDomain": { "type": "string" },
+                    "ips": { "type": "array", "items": "string" },
+                    "legacyIps": { "type": "array", "items": "string" }
+                }
+            },
             "description": "The subdomains you want to use for your nameservers"
         },
         "uiSubDomain": {
@@ -53,7 +60,7 @@
 
         "autoConfigureMainDomain": {
             "type": "boolean",
-            "description": "Use registrar API to auto configure the necessary glue and ns records for your main domain"
+            "description": "create soa ns aaaa and a records for main domain on pektin after installation (Use registrar API to auto configure the necessary glue and ns records for your main domain)"
         },
 
         "proxyConfig": {

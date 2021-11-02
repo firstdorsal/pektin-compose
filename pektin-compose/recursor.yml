@@ -8,7 +8,6 @@ services:
             - ../config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
         networks:
             - rp
-        recursor:
         labels:
             traefik.enable: "true"
             traefik.http.routers.pektin-recursor.tls.certresolver: "default"
