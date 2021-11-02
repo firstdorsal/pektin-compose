@@ -39,4 +39,4 @@ services:
             traefik.tcp.routers.pektin-server-dot.rule: "HostSNI(`${SERVER_DOMAINS_SNI}`)"
             traefik.tcp.routers.pektin-server-dot.tls: "true"
             traefik.tcp.routers.pektin-server-dot.entrypoints: "dot"
-            traefik.tcp.routers.pektin-server-dot.loadbalancer.server.port: "53"
+            traefik.tcp.services.pektin-server-dot.loadbalancer.server.port: "53"

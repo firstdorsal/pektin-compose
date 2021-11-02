@@ -15,7 +15,7 @@
 
     "enableRotate": true,
     "createCerts": true,
-    "letsencryptEmail": "letsencrypt@example.com",
+    "letsencryptEmail": "letsencrypt@pektin.xyz",
 
     "autoConfigureMainDomain": true,
 

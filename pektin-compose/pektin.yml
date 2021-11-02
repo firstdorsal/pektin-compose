@@ -11,8 +11,12 @@ services:
             - ../config/vault/:/vault/config/
             - ../logs/vault/:/vault/logs
         command: server
+        # TODO: GENERATE FULL VAUL API URL WITH INSTALL INTO .env
+        #environment:
+        #  - VAULT_API_ADDR=
         networks:
             - vault
+            - rp
     ui:
         image: pektin/ui
         container_name: pektin-ui
@@ -32,9 +36,11 @@ services:
         networks:
             - vault
             - db
+            - rp
         depends_on:
             - redis
             - vault
+
     redis:
         image: redis
         container_name: pektin-redis
