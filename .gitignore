@@ -4,4 +4,4 @@ secrets
 start.sh
 stop.sh
 update.sh
-compose/src
+pektin-compose/src

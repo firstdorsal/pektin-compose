@@ -33,7 +33,7 @@
             "type": "string",
             "description": "The subdomain you want to use for accessing vault"
         },
-        "recursorDomain": {
+        "recursorSubDomain": {
             "type": "string",
             "description": "The subdomain you want to use for accessing the recursor (if enabled)"
         },

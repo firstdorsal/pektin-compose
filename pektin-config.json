@@ -7,7 +7,7 @@
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
     "vaultSubDomain": "vault.pektin",
-    "recursorDomain": "recursor.pektin",
+    "recursorSubDomain": "recursor.pektin",
 
     "enableUi": true,
     "enableApi": true,
