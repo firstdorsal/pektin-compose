@@ -211,7 +211,7 @@ export const envSetValues = async v => {
         [
             "SERVER_DOMAINS_SNI",
             v.pektinConfig.nameServers
-                .map(ns => ns.subDomain + "." + v.pektinConfig.domain)
+                .map(ns => `\`${ns.subDomain}.${v.pektinConfig.domain}\``)
                 .toString()
         ]
     ];

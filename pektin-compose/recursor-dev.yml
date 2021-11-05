@@ -23,6 +23,7 @@ services:
             - rp
         labels:
             traefik.enable: "true"
+            traefik.docker.network: rp
             traefik.http.routers.pektin-recursor.rule: "PathPrefix(`/dns-query`)"
             traefik.http.routers.pektin-recursor.entrypoints: "web"
             traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"

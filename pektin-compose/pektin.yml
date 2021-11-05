@@ -60,6 +60,7 @@ services:
             - R_PEKTIN_SERVER_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
         networks:
             - db
+            - rp
         ports:
             - 53:53/udp
             - 53:53/tcp

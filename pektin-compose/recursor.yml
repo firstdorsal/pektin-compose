@@ -10,6 +10,7 @@ services:
             - rp
         labels:
             traefik.enable: "true"
+            traefik.docker.network: rp
             traefik.http.routers.pektin-recursor.tls.certresolver: "default"
             traefik.http.routers.pektin-recursor.tls.domains[0].main: "${DOMAIN}"
             traefik.http.routers.pektin-recursor.tls.domains[0].sans: "*.${DOMAIN}"
