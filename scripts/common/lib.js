@@ -247,11 +247,8 @@ export const buildFromSource = async pektinConfig => {
     if (pektinConfig.enableUi) await exec(`${clone}pektin-ui ${path.join(src, "pektin-ui")}`);
 };
 
-export const createStartScript = async pektinConfig => {
-    let file = `#!/bin/sh\n`;
-    // create pektin compose command with different options
-    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
-
+export const activeComposeFiles = pektinConfig => {
+    let composeCommand = ` -f pektin-compose/pektin.yml`;
     if (pektinConfig.dev === "insecure-online") {
         composeCommand += ` -f pektin-compose/insecure-online-dev.yml`;
     }
@@ -277,6 +274,15 @@ export const createStartScript = async pektinConfig => {
             composeCommand += ` -f pektin-compose/traefik.yml`;
         }
     }
+    return composeCommand;
+};
+
+export const createStartScript = async pektinConfig => {
+    let file = `#!/bin/sh\n`;
+    // create pektin compose command with different options
+    let composeCommand = `docker-compose --env-file secrets/.env`;
+
+    composeCommand += activeComposeFiles(pektinConfig);
     composeCommand += ` up -d`;
     composeCommand += pektinConfig.buildFromSource ? " --build" : "";
 
@@ -295,7 +301,8 @@ export const createStartScript = async pektinConfig => {
 
 export const createStopScript = async pektinConfig => {
     let file = `#!/bin/sh\n`;
-    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
+    let composeCommand = `docker-compose --env-file secrets/.env`;
+    composeCommand += activeComposeFiles(pektinConfig);
     composeCommand += ` down`;
     file += composeCommand;
 
@@ -304,7 +311,9 @@ export const createStopScript = async pektinConfig => {
 
 export const createUpdateScript = async pektinConfig => {
     let file = `#!/bin/sh\n`;
-    let composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml`;
+    let composeCommand = `docker-compose --env-file secrets/.env`;
+    composeCommand += activeComposeFiles(pektinConfig);
+
     composeCommand += ` pull`;
 
     file += composeCommand + "\n";
