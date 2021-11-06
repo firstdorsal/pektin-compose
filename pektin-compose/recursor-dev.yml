@@ -24,15 +24,20 @@ services:
         labels:
             traefik.enable: "true"
             traefik.docker.network: rp
+
             traefik.http.routers.pektin-recursor.rule: "PathPrefix(`/dns-query`)"
             traefik.http.routers.pektin-recursor.entrypoints: "web"
+            traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-chained@docker
+
             traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"
             traefik.http.services.pektin-recursor.loadbalancer.server.scheme: "h2c"
-            traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-cors@docker
-            traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-auth@docker
+
+            # chain both middlewares
+            traefik.http.middlewares.pektin-recursor-chained.chain.middlewares: pektin-recursor-cors@docker,pektin-recursor-auth@docker
             # enable cors
-            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST
+            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST,PUT
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolalloworiginlist: "*"
+            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowheaders: authorization,content-type
             # add auth
             traefik.http.middlewares.pektin-recursor-auth.basicauth.users: ${RECURSOR_AUTH}
 
