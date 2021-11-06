@@ -11,6 +11,6 @@
     "dependencies": {
         "dotenv": "^10.0.0",
         "node-fetch": "^3.0.0",
-        "pektin": "^1.0.4"
+        "@pektin/client": "^1.0.5"
     }
 }

@@ -4,7 +4,6 @@
 if [[ $1 = "delete-old" ]]
 then
 echo "deleting old artifacts"
-#sudo rm -rf secrets
 docker-compose -f pektin-compose/pektin.yml down --remove-orphans
 docker rm pektin-vault --force -v
 docker volume rm pektin-compose_vault pektin-compose_db
@@ -26,5 +25,5 @@ bash start.sh
 # run pektin-first-start
 docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-first-start --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/first-start/)
 
-# clean up pektin-install
+# clean up pektin-first-start
 docker rm pektin-compose-first-start -v
