@@ -21,6 +21,10 @@
             },
             "description": "The subdomains you want to use for your nameservers"
         },
+        "multiNode": {
+            "type": "boolean",
+            "description": "whether or not to run on multiple hosts"
+        },
         "uiSubDomain": {
             "type": "string",
             "description": "The subdomain you want to use for accessing the user interface (if enabled)"

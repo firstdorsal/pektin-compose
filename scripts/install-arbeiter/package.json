@@ -1,0 +1,15 @@
+{
+    "name": "pektin-install-arbeiter",
+    "authors": "Paul Colin Hennig",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "license": "MIT",
+    "scripts": {
+        "start": "node --no-warnings index.js"
+    },
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "node-fetch": "^3.0.0"
+    }
+}

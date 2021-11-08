@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+    redis:
+        container_name: pektin-redis-direktor
+        volumes:
+            - ../config/redis/direktor/redis.conf:/usr/local/etc/redis/redis.conf:ro
+        networks:
+            - pektin-gewerkschaft
+networks:
+    pektin-gewerkschaft:
+        name: pektin-gewerkschaft
+        driver: overlay
