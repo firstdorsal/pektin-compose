@@ -1,4 +1,4 @@
-import f from "node-fetch";
+import f from "cross-fetch";
 import { exit } from "process";
 import crypto from "crypto";
 import fs from "fs/promises";
@@ -59,7 +59,7 @@ export const enableCors = async vaultToken => {
 };
 
 export const createUserPassAccount = async (vaultToken, name, policies, password) => {
-    await f(path.join(internalVaultUrl, "/v1/auth/userpass/users/", name), {
+    await f(`${internalVaultUrl}/v1/auth/userpass/users/${name}`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -70,7 +70,7 @@ export const createUserPassAccount = async (vaultToken, name, policies, password
 
 export const createAppRole = async (vaultToken, name, policies) => {
     // create role
-    await f(path.join(internalVaultUrl, "/v1/auth/approle/role/", name), {
+    await f(`${internalVaultUrl}/v1/auth/approle/role/${name}`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -78,32 +78,26 @@ export const createAppRole = async (vaultToken, name, policies) => {
         body: JSON.stringify({ policies })
     });
     // get role id
-    const roleIdRes = await await f(
-        path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "role-id"),
-        {
-            headers: {
-                "X-Vault-Token": vaultToken
-            }
+    const roleIdRes = await await f(`${internalVaultUrl}/v1/auth/approle/role/${name}/role-id`, {
+        headers: {
+            "X-Vault-Token": vaultToken
         }
-    );
+    });
     const roleIdParsed = await roleIdRes.json();
     // get secret
-    const secretIdRes = await f(
-        path.join(internalVaultUrl, "/v1/auth/approle/role/", name, "secret-id"),
-        {
-            method: "POST",
-            headers: {
-                "X-Vault-Token": vaultToken
-            }
+    const secretIdRes = await f(`${internalVaultUrl}/v1/auth/approle/role/${name}/secret-id`, {
+        method: "POST",
+        headers: {
+            "X-Vault-Token": vaultToken
         }
-    );
+    });
     const secretIdParsed = await secretIdRes.json();
 
     return { role_id: roleIdParsed.data.role_id, secret_id: secretIdParsed.data.secret_id };
 };
 
 export const enableSecretEngine = async (vaultToken, enginePath, engineOptions) => {
-    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/mounts", enginePath), {
+    const vaultRes = await f(`${internalVaultUrl}/v1/sys/mounts/${enginePath}`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -114,7 +108,7 @@ export const enableSecretEngine = async (vaultToken, enginePath, engineOptions) 
 };
 
 export const enableAuthMethod = async (vaultToken, type) => {
-    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/auth", type), {
+    const vaultRes = await f(`${internalVaultUrl}/v1/sys/auth/${type}`, {
         method: "POST",
         headers: {
             "X-Vault-Token": vaultToken
@@ -144,7 +138,7 @@ export const createVaultPolicies = async vaultToken => {
 };
 
 export const createVaultPolicy = async (vaultToken, policyName, policy) => {
-    const vaultRes = await f(path.join(internalVaultUrl, "v1/sys/policies/acl", policyName), {
+    const vaultRes = await f(`${internalVaultUrl}/v1/sys/policies/acl/${policyName}`, {
         method: "PUT",
         headers: {
             "X-Vault-Token": vaultToken
@@ -156,7 +150,7 @@ export const createVaultPolicy = async (vaultToken, policyName, policy) => {
 };
 
 export const unsealVault = async key => {
-    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/unseal"), {
+    const vaultRes = await f(`${internalVaultUrl}/v1/sys/unseal`, {
         method: "PUT",
         body: JSON.stringify({ key })
     });
@@ -164,7 +158,7 @@ export const unsealVault = async key => {
 };
 
 export const getVaultTokens = async () => {
-    const vaultRes = await f(path.join(internalVaultUrl, "/v1/sys/init"), {
+    const vaultRes = await f(`${internalVaultUrl}/v1/sys/init`, {
         method: "PUT",
         body: JSON.stringify({ secret_shares: 1, secret_threshold: 1 })
     });
