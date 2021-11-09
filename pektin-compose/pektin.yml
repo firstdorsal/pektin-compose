@@ -42,16 +42,17 @@ services:
             - vault
 
     redis:
-        image: redis
+        image: bitnami/redis
+        user: root
         container_name: pektin-redis
         restart: always
         volumes:
-            - db:/data
-            - ../config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-            - ../secrets/redis/users.acl:/usr/local/etc/redis/users.acl:ro
+            - db:/bitnami/redis/data
+            - ../config/redis/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf:ro
+            - ../secrets/redis/users.acl:/opt/bitnami/redis/mounted-etc/users.acl:ro
         networks:
             - db
-        command: "redis-server /usr/local/etc/redis/redis.conf"
+        command: "redis-server /opt/bitnami/redis/mounted-etc/redis.conf"
     server:
         image: pektin/server
         container_name: pektin-server

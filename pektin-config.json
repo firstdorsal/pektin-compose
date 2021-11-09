@@ -4,6 +4,8 @@
         { "subDomain": "ns1", "ips": ["2a01:4f9:c010:9298::1"], "legacyIps": ["65.108.88.212"] },
         { "subDomain": "ns2", "ips": ["2a01:4f8:c0c:22d8::1"], "legacyIps": ["23.88.59.245"] }
     ],
+    "multiNode": false,
+
     "uiSubDomain": "ui.pektin",
     "apiSubDomain": "api.pektin",
     "vaultSubDomain": "vault.pektin",

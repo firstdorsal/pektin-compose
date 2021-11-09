@@ -216,8 +216,63 @@ export const envSetValues = async v => {
     await fs.writeFile(path.join(dir, "secrets", ".env"), file);
 };
 
-export const setRedisPasswordHashes = async repls => {
-    let file = await fs.readFile(path.join(dir, "config", "redis", "users.template.acl"), {
+export const createArbeiterConfig = async v => {
+    await fs.mkdir(path.join(dir, "arbeiter")).catch(() => {});
+    v.pektinConfig.nameServers.forEach(async (ns, i) => {
+        if (i === 0) return;
+        await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain)).catch(() => {});
+
+        await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets")).catch(() => {});
+        await fs
+            .mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis"))
+            .catch(() => {});
+        const R_PEKTIN_SERVER_PASSWORD = randomString();
+        const redisFile = await setRedisPasswordHashes(
+            [["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD]],
+            v.pektinConfig,
+            true
+        );
+        await fs.writeFile(
+            path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis", "users.acl"),
+            redisFile
+        );
+
+        const repls = [
+            ["R_PEKTIN_GEWERKSCHAFT_PASSWORD", v.R_PEKTIN_GEWERKSCHAFT_PASSWORD],
+            ["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD],
+            ["SERVER_DOMAINS_SNI", `\`${ns.subDomain}.${v.pektinConfig.domain}\``]
+        ];
+
+        let file = "# DO NOT EDIT THESE MANUALLY \n";
+        repls.forEach(repl => {
+            file = file += `${repl[0]}="${repl[1]}"\n`;
+        });
+        await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "secrets", ".env"), file);
+        const composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/arbeiter/base.yml -f pektin-compose/arbeiter/traefik-config.yml -f pektin-compose/traefik.yml up -d`;
+        await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "start.sh"), composeCommand);
+    });
+};
+
+export const createSwarmScript = async pektinConfig => {
+    let script = `docker swarm init \n`;
+    pektinConfig.nameServers.forEach((ns, i) => {
+        if (i === 0) return;
+        script += `docker swarm join-token worker | grep docker > arbeiter/${ns.subDomain}/install.sh \n`;
+    });
+
+    await fs.writeFile(path.join(dir, "swarm.sh"), script);
+};
+
+export const setRedisPasswordHashes = async (repls, pektinConfig, arbeiter = false) => {
+    let readPath;
+    if (arbeiter) {
+        readPath = path.join(dir, "config", "redis", "arbeiter", "users.template.acl");
+    } else {
+        readPath = pektinConfig.multiNode
+            ? path.join(dir, "config", "redis", "direktor", "users.template.acl")
+            : path.join(dir, "config", "redis", "users.template.acl");
+    }
+    let file = await fs.readFile(readPath, {
         encoding: "UTF-8"
     });
 
@@ -226,9 +281,12 @@ export const setRedisPasswordHashes = async repls => {
     repls.forEach(repl => {
         file = file.replaceAll(RegExp(`${repl[0]}_SHA256$`, "gm"), `${hash(repl[1])}`);
     });
+    if (arbeiter) {
+        return file;
+    }
     await fs.mkdir(path.join(dir, "secrets", "redis")).catch(() => {});
     await fs.writeFile(path.join(dir, "secrets", "redis", "users.acl"), file);
-    crypto.create;
+    //crypto.create;
 };
 
 export const buildFromSource = async pektinConfig => {
@@ -243,9 +301,15 @@ export const buildFromSource = async pektinConfig => {
 
 export const activeComposeFiles = pektinConfig => {
     let composeCommand = ` -f pektin-compose/pektin.yml`;
+
+    if (pektinConfig.multiNode) {
+        composeCommand += ` -f pektin-compose/gewerkschaft-config.yml`;
+    }
+
     if (pektinConfig.dev === "insecure-online") {
         composeCommand += ` -f pektin-compose/insecure-online-dev.yml`;
     }
+
     if (pektinConfig.dev === "local") {
         composeCommand += ` -f pektin-compose/local-dev.yml`;
         if (pektinConfig.enableRecursor) {
@@ -260,14 +324,17 @@ export const activeComposeFiles = pektinConfig => {
     if (pektinConfig.buildFromSource) {
         composeCommand += ` -f pektin-compose/build-from-source.yml`;
     }
+
     if (pektinConfig.proxyConfig === "traefik") {
         composeCommand += ` -f pektin-compose/traefik-config.yml`;
     }
+
     if (pektinConfig.createProxy === true) {
         if (pektinConfig.proxyConfig === "traefik" && pektinConfig.dev !== "local") {
             composeCommand += ` -f pektin-compose/traefik.yml`;
         }
     }
+
     return composeCommand;
 };
 

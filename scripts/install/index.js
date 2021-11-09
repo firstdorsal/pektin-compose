@@ -77,10 +77,24 @@ await l.updatePektinKvValue(vaultTokens.rootToken, "pektin-config", pektinConfig
 // init redis access control
 const R_PEKTIN_API_PASSWORD = l.randomString();
 const R_PEKTIN_SERVER_PASSWORD = l.randomString();
-await l.setRedisPasswordHashes([
+const R_PEKTIN_GEWERKSCHAFT_PASSWORD = l.randomString();
+
+const redisPasswords = [
     ["R_PEKTIN_API_PASSWORD", R_PEKTIN_API_PASSWORD],
     ["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD]
-]);
+];
+
+if (pektinConfig.multiNode) {
+    redisPasswords.push(["R_PEKTIN_GEWERKSCHAFT_PASSWORD", R_PEKTIN_GEWERKSCHAFT_PASSWORD]);
+
+    await l.createArbeiterConfig({ R_PEKTIN_GEWERKSCHAFT_PASSWORD, pektinConfig });
+    await l.createSwarmScript(pektinConfig);
+
+    await l.chownRecursive(path.join(dir, `arbeiter`), process.env.UID, process.env.GID);
+    await l.chown(path.join(dir, `swarm.sh`), process.env.UID, process.env.GID);
+}
+
+await l.setRedisPasswordHashes(redisPasswords, pektinConfig);
 
 // set the values in the .env file for provisioning them to the containers
 await l.envSetValues({

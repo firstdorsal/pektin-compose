@@ -1,25 +1,29 @@
 version: "3.7"
 services:
     redis:
-        image: redis
+        image: bitnami/redis
+        user: root
         container_name: pektin-redis-arbeiter
         restart: always
         volumes:
-            - db:/data
-            - ../../config/redis/arbeiter/redis.conf:/usr/local/etc/redis/redis.conf:ro
-            - ../../secrets/redis/users.acl:/usr/local/etc/redis/users.acl:ro
+            - db:/bitnami/redis/data
+            - ../../config/redis/arbeiter/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf:ro
+            - ../../secrets/redis/users.acl:/opt/bitnami/redis/mounted-etc/users.acl:ro
         networks:
             - db
             - pektin-gewerkschaft
-        command: "redis-server /usr/local/etc/redis/redis.conf"
+        command: "redis-server /opt/bitnami/redis/mounted-etc/redis.conf"
         environment:
-            - R_PEKTIN_GEWERKSCHAFT_PASSWORD=${R_PEKTIN_GEWERKSCHAFT_PASSWORD}
+            - REDIS_MASTER_PASSWORD=${R_PEKTIN_GEWERKSCHAFT_PASSWORD}
+            - REDIS_MASTER_HOST=pektin-redis-direktor
+            - REDIS_REPLICATION_MODE=slave
     server:
         image: pektin/server
         container_name: pektin-server
         restart: always
         environment:
             - R_PEKTIN_SERVER_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - REDIS_URI=redis://pektin-redis-arbeiter:6379
         networks:
             - db
             - rp
@@ -28,6 +32,7 @@ services:
             - 53:53/tcp
         depends_on:
             - redis
+
 networks:
     db:
     rp:
