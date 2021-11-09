@@ -32,7 +32,7 @@ services:
         environment:
             - V_PEKTIN_API_ROLE_ID=${V_PEKTIN_API_ROLE_ID}
             - V_PEKTIN_API_SECRET_ID=${V_PEKTIN_API_SECRET_ID}
-            - R_PEKTIN_API_PASSWORD=${R_PEKTIN_API_PASSWORD}
+            - REDIS_URI=redis://r-pektin-api:${R_PEKTIN_API_PASSWORD}@pektin-redis:6379
         networks:
             - vault
             - db
@@ -58,7 +58,7 @@ services:
         container_name: pektin-server
         restart: always
         environment:
-            - R_PEKTIN_SERVER_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
         networks:
             - db
             - rp

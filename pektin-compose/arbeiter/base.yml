@@ -22,7 +22,7 @@ services:
         container_name: pektin-server
         restart: always
         environment:
-            - R_PEKTIN_SERVER_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
             - REDIS_URI=redis://pektin-redis-arbeiter:6379
         networks:
             - db

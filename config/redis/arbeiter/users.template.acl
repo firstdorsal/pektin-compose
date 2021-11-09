@@ -1,1 +1,1 @@
-user r-pektin-server on resetchannels -@all +GET #R_PEKTIN_SERVER_PASSWORD_SHA256
+user r-pektin-server on resetchannels allkeys -@all +GET +MGET #R_PEKTIN_SERVER_PASSWORD_SHA256
