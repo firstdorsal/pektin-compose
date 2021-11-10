@@ -1,1 +1,2 @@
+user default off
 user r-pektin-server on resetchannels allkeys -@all +GET +MGET #R_PEKTIN_SERVER_PASSWORD_SHA256
