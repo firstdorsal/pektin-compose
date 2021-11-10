@@ -11,16 +11,27 @@
         },
         "nameServers": {
             "type": "array",
+
             "items": {
                 "type": "object",
+                "required": ["subDomain", "ips", "legacyIps", "hostname"],
                 "properties": {
                     "subDomain": { "type": "string" },
                     "ips": { "type": "array", "items": "string" },
-                    "legacyIps": { "type": "array", "items": "string" }
+                    "legacyIps": { "type": "array", "items": "string" },
+                    "hostname": {
+                        "type": "string",
+                        "description": "the servers hostname; if your command line says root@gustav-gans then gustav-gans is the hostname"
+                    },
+                    "autoDisableSystemdResolved": {
+                        "type": "boolean",
+                        "description": "run a helper script to disable systemd resolved on ubuntu machines (if systemd-resolved is present it needs to either be stopped manually or automatically becuase it's blocking port 53)"
+                    }
                 }
             },
-            "description": "The subdomains you want to use for your nameservers"
+            "description": "The subdomains you want to use for your nameservers; the first will be the primary name server running the ui, api, vault etc.; all other servers are additional nameserver only running pektin-server, redis and traefik"
         },
+
         "multiNode": {
             "type": "boolean",
             "description": "whether or not to run on multiple hosts"
@@ -80,13 +91,27 @@
             "type": "boolean",
             "description": "Whether or not to build the pektin containers from source"
         },
+        "sources": {
+            "type": "object",
+            "description": "where to pull the sources from; if unset will be pulled from github; will only be used if buildFromSource is set to true",
+            "properties": {
+                "server": {
+                    "type": "string",
+                    "description": "the source path for building the server container"
+                },
+                "api": {
+                    "type": "string",
+                    "description": "the source path for building the api container"
+                },
+                "ui": {
+                    "type": "string",
+                    "description": "the source path for building the ui container"
+                }
+            }
+        },
         "dev": {
             "enum": ["local", "insecure-online"],
             "description": "Whether or not to run in development mode and if yes in what dev mode"
-        },
-        "insecureDevIp": {
-            "type": "string",
-            "description": "The ip you want to use for the dev server if running in 'insecure-online' dev mode"
         }
     }
 }

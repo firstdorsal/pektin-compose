@@ -40,6 +40,7 @@ networks:
     pektin-gewerkschaft:
         name: pektin-gewerkschaft
         external: true
+        driver: overlay
 
 volumes:
     db:

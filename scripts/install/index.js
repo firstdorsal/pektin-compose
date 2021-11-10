@@ -107,21 +107,12 @@ await l.envSetValues({
     recursorBasicAuthHashed
 });
 
-if (pektinConfig.buildFromSource) await l.buildFromSource(pektinConfig);
-
 await l.createStartScript(pektinConfig);
 await l.createStopScript(pektinConfig);
 await l.createUpdateScript(pektinConfig);
 
 // change ownership of all created files to host user
 // also chmod 700 all secrets except for redis ACL
-if (pektinConfig.buildFromSource) {
-    await l.chownRecursive(
-        path.join(dir, `pektin-compose`, `src`),
-        process.env.UID,
-        process.env.GID
-    );
-}
 await l.chown(path.join(dir, `start.sh`), process.env.UID, process.env.GID);
 await l.chown(path.join(dir, `stop.sh`), process.env.UID, process.env.GID);
 await l.chown(path.join(dir, `update.sh`), process.env.UID, process.env.GID);

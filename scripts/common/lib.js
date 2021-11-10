@@ -182,7 +182,10 @@ export const envSetValues = async v => {
     if (v.pektinConfig.dev === "local") {
         CSP_CONNECT_SRC = `*`;
     } else if (v.pektinConfig.dev === "insecure-online") {
-        CSP_CONNECT_SRC = `http://${v.pektinConfig.insecureDevIp}:3001 http://${v.pektinConfig.insecureDevIp}:8200`;
+        const ip = v.pektinConfig.nameServers[0]?.ips?.length
+            ? "[" + v.pektinConfig.nameServers[0]?.ips[0] + "]"
+            : v.pektinConfig.nameServers[0]?.legacyIps[0];
+        CSP_CONNECT_SRC = `http://${ip}:3001 http://${ip}:8200`;
     } else {
         CSP_CONNECT_SRC = `https://${v.pektinConfig.vaultSubDomain}.${v.pektinConfig.domain} https://${v.pektinConfig.apiSubDomain}.${v.pektinConfig.domain}`;
     }
@@ -207,6 +210,15 @@ export const envSetValues = async v => {
             v.pektinConfig.nameServers
                 .map(ns => `\`${ns.subDomain}.${v.pektinConfig.domain}\``)
                 .toString()
+        ],
+        ["UI_BUILD_PATH", v.pektinConfig.sources?.ui || "https://github.com/pektin-dns/pektin-ui"],
+        [
+            "API_BUILD_PATH",
+            v.pektinConfig.sources?.api || "https://github.com/pektin-dns/pektin-api"
+        ],
+        [
+            "SERVER_BUILD_PATH",
+            v.pektinConfig.sources?.server || "https://github.com/pektin-dns/pektin-server-"
         ]
     ];
     let file = "# DO NOT EDIT THESE MANUALLY \n";
@@ -287,16 +299,6 @@ export const setRedisPasswordHashes = async (repls, pektinConfig, arbeiter = fal
     await fs.mkdir(path.join(dir, "secrets", "redis")).catch(() => {});
     await fs.writeFile(path.join(dir, "secrets", "redis", "users.acl"), file);
     //crypto.create;
-};
-
-export const buildFromSource = async pektinConfig => {
-    await fs.mkdir(path.join(dir, "pektin-compose", "src")).catch(() => {});
-    const src = path.join(dir, "pektin-compose", "src");
-    const clone = `git clone https://github.com/pektin-dns/`;
-
-    await exec(`${clone}pektin-server ${path.join(src, "pektin-server")}`);
-    if (pektinConfig.enableApi) await exec(`${clone}pektin-api ${path.join(src, "pektin-api")}`);
-    if (pektinConfig.enableUi) await exec(`${clone}pektin-ui ${path.join(src, "pektin-ui")}`);
 };
 
 export const activeComposeFiles = pektinConfig => {

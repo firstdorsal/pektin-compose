@@ -1,8 +1,8 @@
 version: "3.7"
 services:
     ui:
-        build: /home/paul/Documents/pektin/pektin-ui
+        build: ${UI_BUILD_PATH}
     api:
-        build: /home/paul/Documents/pektin/pektin-api
+        build: ${API_BUILD_PATH}
     server:
-        build: /home/paul/Documents/pektin/pektin-server
+        build: ${SERVER_BUILD_PATH}
