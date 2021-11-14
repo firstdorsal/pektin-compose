@@ -13,7 +13,14 @@
             "ips": ["2a01:4f8:c0c:22d8::1"],
             "legacyIps": ["23.88.59.245"],
             "hostname": "gustav-gans",
-            "autoDisableSystemdResolved": true
+            "createSingleScript": {
+                "system": "ubuntu",
+                "root": {
+                    "disableSystemdResolved": true,
+                    "installDocker": true
+                },
+                "cloneRepo": true
+            }
         }
     ],
     "multiNode": true,
@@ -31,7 +38,7 @@
     "createCerts": true,
     "letsencryptEmail": "letsencrypt@pektin.club",
 
-    "autoConfigureMainDomain": true,
+    "configureMainDomain": true,
 
     "proxyConfig": "traefik",
     "createProxy": true,

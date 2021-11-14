@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
-//import * as l from "/pektin-compose/scripts/common/lib.js";
+import * as l from "/pektin-compose/scripts/common/lib.js";
 import { ExtendedPektinApiClient } from "@pektin/client";
 
 const dir = "/pektin-compose/";
@@ -21,3 +21,13 @@ if (pektinConfig.autoConfigureMainDomain) {
 
     await pc.setupMainDomain();
 }
+pektinConfig.nameServers.forEach(async (ns, i) => {
+    if (i === 0) return;
+    if (ns.createSingleScript && ns.createSingleScript.system) {
+        await l.createSingleScript(
+            path.join(dir, "arbeiter", ns.subDomain),
+            path.join(dir, "arbeiter", `${ns.subDomain}.sh`),
+            ns
+        );
+    }
+});

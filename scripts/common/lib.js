@@ -5,6 +5,7 @@ import fs from "fs/promises";
 import path from "path";
 import { promisify } from "util";
 import { exec as exec_default } from "child_process";
+import recursive from "recursive-readdir";
 
 const internalVaultUrl = "http://pektin-vault:8200";
 const dir = "/pektin-compose/";
@@ -230,49 +231,68 @@ export const envSetValues = async v => {
 
 export const createArbeiterConfig = async v => {
     await fs.mkdir(path.join(dir, "arbeiter")).catch(() => {});
-    v.pektinConfig.nameServers.forEach(async (ns, i) => {
-        if (i === 0) return;
-        await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain)).catch(() => {});
+    for (let i = 0; i < v.pektinConfig.nameServers.length; i++) {
+        const ns = v.pektinConfig.nameServers[i];
 
-        await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets")).catch(() => {});
-        await fs
-            .mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis"))
-            .catch(() => {});
-        const R_PEKTIN_SERVER_PASSWORD = randomString();
-        const redisFile = await setRedisPasswordHashes(
-            [["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD]],
-            v.pektinConfig,
-            true
-        );
-        await fs.writeFile(
-            path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis", "users.acl"),
-            redisFile
-        );
+        if (i !== 0) {
+            await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain)).catch(() => {});
 
-        const repls = [
-            ["R_PEKTIN_GEWERKSCHAFT_PASSWORD", v.R_PEKTIN_GEWERKSCHAFT_PASSWORD],
-            ["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD],
-            ["SERVER_DOMAINS_SNI", `\`${ns.subDomain}.${v.pektinConfig.domain}\``]
-        ];
+            await fs.mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets")).catch(() => {});
+            await fs
+                .mkdir(path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis"))
+                .catch(() => {});
+            const R_PEKTIN_SERVER_PASSWORD = randomString();
+            const redisFile = await setRedisPasswordHashes(
+                [["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD]],
+                v.pektinConfig,
+                true
+            );
+            await fs.writeFile(
+                path.join(dir, "arbeiter", ns.subDomain, "secrets", "redis", "users.acl"),
+                redisFile
+            );
 
-        let file = "# DO NOT EDIT THESE MANUALLY \n";
-        repls.forEach(repl => {
-            file = file += `${repl[0]}="${repl[1]}"\n`;
-        });
-        await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "secrets", ".env"), file);
-        const composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/arbeiter/base.yml -f pektin-compose/arbeiter/traefik-config.yml -f pektin-compose/traefik.yml up -d`;
-        await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "start.sh"), composeCommand);
-    });
+            const repls = [
+                ["R_PEKTIN_GEWERKSCHAFT_PASSWORD", v.R_PEKTIN_GEWERKSCHAFT_PASSWORD],
+                ["R_PEKTIN_SERVER_PASSWORD", R_PEKTIN_SERVER_PASSWORD],
+                ["SERVER_DOMAINS_SNI", `\`${ns.subDomain}.${v.pektinConfig.domain}\``]
+            ];
+
+            let file = "# DO NOT EDIT THESE MANUALLY\n";
+            repls.forEach(repl => {
+                file = file += `${repl[0]}="${repl[1]}"\n`;
+            });
+
+            const composeCommand = `docker-compose --env-file secrets/.env -f pektin-compose/arbeiter/base.yml -f pektin-compose/arbeiter/traefik-config.yml -f pektin-compose/traefik.yml`;
+
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "secrets", ".env"), file);
+            const startScript = `${composeCommand} up -d`;
+
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "start.sh"), startScript);
+
+            const setupScript = `docker swarm leave\n`;
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "setup.sh"), setupScript);
+
+            const stopScript = `${composeCommand} down --remove-orphans`;
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "stop.sh"), stopScript);
+
+            const updateScript = `${composeCommand} pull\nsh start.sh`;
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "update.sh"), updateScript);
+
+            const resetScript = `${composeCommand} down --remove-orphans\ndocker swarm leave --force\ndocker volume rm pektin-compose_db\nrm -rf update.sh start.sh stop.sh secrets/ `;
+            await fs.writeFile(path.join(dir, "arbeiter", ns.subDomain, "reset.sh"), resetScript);
+        }
+    }
 };
 
 export const createSwarmScript = async pektinConfig => {
-    let script = `docker swarm init \n`;
+    let swarmScript = `docker swarm init \n`;
     pektinConfig.nameServers.forEach((ns, i) => {
         if (i === 0) return;
-        script += `docker swarm join-token worker | grep docker > arbeiter/${ns.subDomain}/install.sh \n`;
+        swarmScript += `docker swarm join-token worker | grep docker >> arbeiter/${ns.subDomain}/setup.sh\n`;
     });
 
-    await fs.writeFile(path.join(dir, "swarm.sh"), script);
+    await fs.writeFile(path.join(dir, "swarm.sh"), swarmScript);
 };
 
 export const setRedisPasswordHashes = async (repls, pektinConfig, arbeiter = false) => {
@@ -340,7 +360,7 @@ export const activeComposeFiles = pektinConfig => {
     return composeCommand;
 };
 
-export const createStartScript = async pektinConfig => {
+export const createStartScript = async (pektinConfig, p = path.join(dir, "start.sh")) => {
     let file = `#!/bin/sh\n`;
     // create pektin compose command with different options
     let composeCommand = `docker-compose --env-file secrets/.env`;
@@ -359,20 +379,20 @@ export const createStartScript = async pektinConfig => {
     // compose up everything
     file += composeCommand;
 
-    await fs.writeFile(path.join(dir, "start.sh"), file);
+    await fs.writeFile(p, file);
 };
 
-export const createStopScript = async pektinConfig => {
+export const createStopScript = async (pektinConfig, p = path.join(dir, "stop.sh")) => {
     let file = `#!/bin/sh\n`;
     let composeCommand = `docker-compose --env-file secrets/.env`;
     composeCommand += activeComposeFiles(pektinConfig);
     composeCommand += ` down`;
     file += composeCommand;
 
-    await fs.writeFile(path.join(dir, "stop.sh"), file);
+    await fs.writeFile(p, file);
 };
 
-export const createUpdateScript = async pektinConfig => {
+export const createUpdateScript = async (pektinConfig, p = path.join(dir, "update.sh")) => {
     let file = `#!/bin/sh\n`;
     let composeCommand = `docker-compose --env-file secrets/.env`;
     composeCommand += activeComposeFiles(pektinConfig);
@@ -380,8 +400,8 @@ export const createUpdateScript = async pektinConfig => {
     composeCommand += ` pull`;
 
     file += composeCommand + "\n";
-    file += `bash start.sh`;
-    await fs.writeFile(path.join(dir, "update.sh"), file);
+    file += `sh start.sh`;
+    await fs.writeFile(p, file);
 };
 
 export const genBasicAuthHashed = (username, password) => {
@@ -392,4 +412,39 @@ export const genBasicAuthHashed = (username, password) => {
 export const genBasicAuthString = (username, password) => {
     const s = Buffer.from(`${username}:${password}`).toString("base64");
     return `Basic ${s}`;
+};
+
+export const createSingleScript = async (sourceFolder, scriptDestination, nsConfig) => {
+    const dirs = await recursive(sourceFolder);
+    const out = [];
+    let content = ``;
+
+    if (nsConfig?.createSingleScript?.cloneRepo) {
+        content += `git clone https://github.com/pektin-dns/pektin-compose ; cd pektin-compose; `;
+    }
+
+    for (let i = 0; i < dirs.length; i++) {
+        const basePath = dirs[i];
+        const contents = await fs.readFile(basePath, "utf-8");
+        const filePath = basePath.replace(sourceFolder, "");
+
+        out.push({
+            basePath,
+            filePath,
+            contents
+        });
+        content += `mkdir -p ${path.join(".", path.dirname(filePath))};`;
+
+        content += `echo -ne '${contents.replaceAll("\n", "\\n")}' > ${path.join(".", filePath)};`;
+    }
+
+    if (nsConfig?.createSingleScript?.root?.installDocker) {
+        content += `sudo sh scripts/systems/${nsConfig.createSingleScript.system}/install-docker.sh; `;
+    }
+    if (nsConfig?.createSingleScript?.root?.disableSystemdResolved) {
+        content += `sudo sh scripts/systems/${nsConfig.createSingleScript.system}/disable-systemd-resolved.sh; `;
+    }
+
+    await fs.writeFile(scriptDestination, content + "history -d $(history 1)");
+    return out;
 };

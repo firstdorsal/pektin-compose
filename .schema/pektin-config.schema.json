@@ -23,9 +23,31 @@
                         "type": "string",
                         "description": "the servers hostname; if your command line says root@gustav-gans then gustav-gans is the hostname"
                     },
-                    "autoDisableSystemdResolved": {
-                        "type": "boolean",
-                        "description": "run a helper script to disable systemd resolved on ubuntu machines (if systemd-resolved is present it needs to either be stopped manually or automatically becuase it's blocking port 53)"
+                    "createSingleScript": {
+                        "type": "object",
+                        "required": ["system"],
+                        "properties": {
+                            "system": { "enum": ["ubuntu"] },
+
+                            "root": {
+                                "type": "object",
+                                "description": "options that require root priviliges on the arbeiter machine",
+                                "properties": {
+                                    "disableSystemdResolved": {
+                                        "type": "boolean",
+                                        "description": "run a helper script to disable systemd resolved on ubuntu machines (if systemd-resolved is present it needs to either be stopped manually or automatically becuase it's blocking port 53)"
+                                    },
+                                    "installDocker": {
+                                        "type": "boolean",
+                                        "description": "will add docker installation script"
+                                    }
+                                }
+                            },
+                            "cloneRepo": {
+                                "type": "boolean",
+                                "description": "whether or not cloning the compose repo should be included in the single script"
+                            }
+                        }
                     }
                 }
             },
@@ -73,7 +95,7 @@
             "description": "Required if createCerts is true"
         },
 
-        "autoConfigureMainDomain": {
+        "configureMainDomain": {
             "type": "boolean",
             "description": "create soa ns aaaa and a records for main domain on pektin after installation (Use registrar API to auto configure the necessary glue and ns records for your main domain)"
         },

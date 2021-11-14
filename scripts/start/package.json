@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "dotenv": "^10.0.0",
-        "cross-fetch": "^3.0.0"
+        "cross-fetch": "^3.0.0",
+        "recursive-readdir": "^2.2.2"
     }
 }
