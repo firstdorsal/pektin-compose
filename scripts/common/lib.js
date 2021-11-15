@@ -444,7 +444,12 @@ export const createSingleScript = async (sourceFolder, scriptDestination, nsConf
     if (nsConfig?.createSingleScript?.root?.disableSystemdResolved) {
         content += `sudo sh scripts/systems/${nsConfig.createSingleScript.system}/disable-systemd-resolved.sh; `;
     }
-
+    if (nsConfig?.createSingleScript?.setup) {
+        content += `bash setup.sh; `;
+    }
+    if (nsConfig?.createSingleScript?.start) {
+        content += `bash start.sh; `;
+    }
     await fs.writeFile(scriptDestination, content + "history -d $(history 1)");
     return out;
 };

@@ -11,24 +11,18 @@
         },
         "nameServers": {
             "type": "array",
-
             "items": {
                 "type": "object",
-                "required": ["subDomain", "ips", "legacyIps", "hostname"],
+                "required": ["subDomain", "ips", "legacyIps"],
                 "properties": {
                     "subDomain": { "type": "string" },
                     "ips": { "type": "array", "items": "string" },
                     "legacyIps": { "type": "array", "items": "string" },
-                    "hostname": {
-                        "type": "string",
-                        "description": "the servers hostname; if your command line says root@gustav-gans then gustav-gans is the hostname"
-                    },
                     "createSingleScript": {
                         "type": "object",
                         "required": ["system"],
                         "properties": {
                             "system": { "enum": ["ubuntu"] },
-
                             "root": {
                                 "type": "object",
                                 "description": "options that require root priviliges on the arbeiter machine",
@@ -46,6 +40,14 @@
                             "cloneRepo": {
                                 "type": "boolean",
                                 "description": "whether or not cloning the compose repo should be included in the single script"
+                            },
+                            "setup": {
+                                "type": "boolean",
+                                "description": "whether or not to run the setup script"
+                            },
+                            "start": {
+                                "type": "boolean",
+                                "description": "whether or not to run the start script"
                             }
                         }
                     }
@@ -53,7 +55,6 @@
             },
             "description": "The subdomains you want to use for your nameservers; the first will be the primary name server running the ui, api, vault etc.; all other servers are additional nameserver only running pektin-server, redis and traefik"
         },
-
         "multiNode": {
             "type": "boolean",
             "description": "whether or not to run on multiple hosts"

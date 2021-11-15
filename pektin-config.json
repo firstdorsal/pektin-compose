@@ -1,25 +1,24 @@
 {
-    "domain": "pektin.club",
+    "domain": "pektin.xyz",
     "nameServers": [
         {
             "subDomain": "ns1",
             "ips": ["2a01:4f9:c010:9298::1"],
-            "legacyIps": ["65.108.88.212"],
-            "hostname": "balduin",
-            "autoDisableSystemdResolved": true
+            "legacyIps": ["65.108.88.212"]
         },
         {
             "subDomain": "ns2",
             "ips": ["2a01:4f8:c0c:22d8::1"],
             "legacyIps": ["23.88.59.245"],
-            "hostname": "gustav-gans",
             "createSingleScript": {
                 "system": "ubuntu",
                 "root": {
                     "disableSystemdResolved": true,
                     "installDocker": true
                 },
-                "cloneRepo": true
+                "cloneRepo": true,
+                "setup": true,
+                "start": true
             }
         }
     ],
@@ -49,6 +48,5 @@
         "api": "/home/paul/Documents/pektin/pektin-api",
         "ui": "/home/paul/Documents/pektin/pektin-ui"
     },
-
     "dev": "local"
 }
