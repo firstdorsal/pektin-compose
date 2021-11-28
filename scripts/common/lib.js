@@ -173,8 +173,8 @@ export const randomString = (length = 100) => {
 };
 
 const addAllowedConnectSources = connectSources => {
-    const sources = ["https://dns.google", "https://cloudflare-dns.com"];
-    sources.forEach(e => (connectSources += " " + e));
+    const sources = [];
+    if (sources.length) sources.forEach(e => (connectSources += " " + e));
     return connectSources;
 };
 
