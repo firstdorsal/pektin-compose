@@ -2,23 +2,23 @@ version: "3.7"
 services:
     vault:
         ports:
-            - 127.0.0.1:8200:8200
+            - 8200:8200
     ui:
         ports:
-            - 127.0.0.1:8080:80
+            - 8080:80
     api:
         ports:
-            - 127.0.0.1:3001:80
+            - 3001:80
         environment:
             DISABLE_AUTH: $DISABLE_AUTH
     redis:
         ports:
-            - 127.0.0.1:6379:6379
+            - 6379:6379
     server:
         ports:
-            - 127.0.0.1:5354:53/udp
-            - 127.0.0.1:5354:53/tcp
+            - 5354:53/udp
+            - 5354:53/tcp
     recursor:
         ports:
-            - 127.0.0.1:5355:53/udp
-            - 127.0.0.1:5355:53/tcp
+            - 5355:53/udp
+            - 5355:53/tcp
