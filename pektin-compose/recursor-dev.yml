@@ -14,11 +14,11 @@ services:
             - --providers.docker=true
             - --entrypoints.web.address=:80
     recursor:
-        image: mvance/unbound:1.13.2
+        image: internetsystemsconsortium/bind9:9.17
         container_name: pektin-recursor
         restart: always
         volumes:
-            - ../config/unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+            - ../config/bind/named.conf:/etc/bind/named.conf:ro
         networks:
             - rp
         labels:
