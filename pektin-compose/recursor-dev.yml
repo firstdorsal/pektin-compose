@@ -14,7 +14,7 @@ services:
             - --providers.docker=true
             - --entrypoints.web.address=:80
     recursor:
-        image: internetsystemsconsortium/bind9:9.17
+        image: pektin/bind-alpine-docker
         container_name: pektin-recursor
         restart: always
         volumes:
