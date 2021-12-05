@@ -21,7 +21,7 @@ access:
 ```
 
 ```rego
-package play
+package system.main
 
 default domain = true
 default apiMethods = true
@@ -81,7 +81,7 @@ or the same
 ```
 
 ```rego
-package play
+package system.main
 
 default domain = false
 default apiMethods = false
@@ -130,7 +130,7 @@ can use any pattern
 ```
 
 ```rego
-package play
+package system.main
 import future.keywords.in
 
 default domain = false

@@ -1,0 +1,12 @@
+{
+    "rego_modules": {
+        "policy.rego": "package play\nimport future.keywords.in\n\ndefault domain = false\ndefault apiMethods = false\ndefault rrTypes = false\ndefault valuePatterns = false\n\n\ndomain {\n    startswith(input.domain,\"_acme-challenge.\")\n    endswith(input.domain,\".\")\n}\n\napiMethods {\n    input.apiMethods in [\"set\",\"get\",\"delete\"]\n}\n\nrrTypes {\n    input.rrTypes in [\"TXT\"]\n}\n\nvaluePatterns {\n    true\n}"
+    },
+    "input": {
+        "domain": "_acme-challenge.y.gy.",
+        "apiMethods": "set",
+        "rrTypes": "TXT",
+        "valuePatterns": "any"
+    },
+    "data": {}
+}

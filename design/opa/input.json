@@ -1,0 +1,6 @@
+{
+    "domain": "_acme-challenge.y.gy.",
+    "apiMethods": "set",
+    "rrTypes": "TXT",
+    "valuePatterns": "any"
+}

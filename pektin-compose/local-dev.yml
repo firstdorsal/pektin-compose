@@ -22,3 +22,6 @@ services:
         ports:
             - 5355:53/udp
             - 5355:53/tcp
+    opa-opa:
+        ports:
+            - 8081:80

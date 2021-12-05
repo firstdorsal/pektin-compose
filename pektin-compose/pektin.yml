@@ -37,10 +37,11 @@ services:
             - vault
             - db
             - rp
+            - opa
         depends_on:
             - redis
             - vault
-
+            - opa-opa
     redis:
         image: bitnami/redis
         user: root
@@ -67,12 +68,21 @@ services:
             - 53:53/tcp
         depends_on:
             - redis
+    opa-opa:
+        container_name: pektin-opa
+        restart: always
+        image: openpolicyagent/opa:latest
+        networks:
+            - opa
+        command: "run --server --addr :80"
 
 networks:
     vault:
     db:
     rp:
         name: rp
+    opa:
+
 volumes:
     vault:
     db:
