@@ -1,1 +1,0 @@
-opa eval --data acme.rego --input input.json data.system

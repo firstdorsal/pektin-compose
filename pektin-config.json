@@ -35,14 +35,14 @@
 
     "enableRotate": true,
     "createCerts": true,
-    "letsencryptEmail": "letsencrypt@pektin.club",
+    "letsencryptEmail": "letsencrypt@pektin.xyz",
 
     "configureMainDomain": true,
 
     "proxyConfig": "traefik",
     "createProxy": true,
 
-    "buildFromSource": true,
+    "buildFromSource": false,
     "sources": {
         "server": "/home/paul/Documents/pektin/pektin-server",
         "api": "/home/paul/Documents/pektin/pektin-api",
