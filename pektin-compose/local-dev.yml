@@ -10,7 +10,7 @@ services:
         ports:
             - 3001:80
         environment:
-            DISABLE_AUTH: $DISABLE_AUTH
+            SKIP_AUTH: $SKIP_AUTH
     redis:
         ports:
             - 6379:6379
@@ -22,6 +22,6 @@ services:
         ports:
             - 5355:53/udp
             - 5355:53/tcp
-    opa-opa:
+    ribston:
         ports:
             - 8081:80

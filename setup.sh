@@ -10,7 +10,7 @@ fi
 docker-compose -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-install --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/install/)
+docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-install --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/install/ --no-cache)
 
 # clean up pektin-install
 docker rm pektin-compose-install -v

@@ -10,6 +10,6 @@
     },
     "dependencies": {
         "dotenv": "^10.0.0",
-        "@pektin/client": "^1.0.23"
+        "@pektin/client": "^1.0.28"
     }
 }

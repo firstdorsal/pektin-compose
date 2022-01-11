@@ -37,11 +37,11 @@ services:
             - vault
             - db
             - rp
-            - opa
+            - ribston
         depends_on:
             - redis
             - vault
-            - opa-opa
+            - ribston
     redis:
         image: bitnami/redis
         user: root
@@ -68,20 +68,19 @@ services:
             - 53:53/tcp
         depends_on:
             - redis
-    opa-opa:
-        container_name: pektin-opa
+    ribston:
+        container_name: pektin-ribston
         restart: always
-        image: openpolicyagent/opa:latest
+        image: pektin/ribston
         networks:
-            - opa
-        command: "run --server --addr :80"
+            - ribston
 
 networks:
     vault:
     db:
     rp:
         name: rp
-    opa:
+    ribston:
 
 volumes:
     vault:
