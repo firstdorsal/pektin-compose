@@ -12,6 +12,9 @@ services:
     redis:
         ports:
             - 6379:6379
+    ribston:
+        ports:
+            - 8888:80
     server:
         ports:
             - 53:53/udp
