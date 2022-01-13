@@ -42,7 +42,7 @@
     "proxyConfig": "traefik",
     "createProxy": true,
 
-    "buildFromSource": false,
+    "buildFromSource": true,
     "sources": {
         "server": "/home/paul/Documents/pektin/pektin-server",
         "api": "/home/paul/Documents/pektin/pektin-api",
