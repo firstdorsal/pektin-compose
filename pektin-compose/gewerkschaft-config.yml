@@ -10,10 +10,12 @@ services:
             - REDIS_REPLICATION_MODE=master
     api:
         environment:
-            - REDIS_URI=redis://r-pektin-api:${R_PEKTIN_API_PASSWORD}@pektin-redis-direktor:6379
+            - REDIS_HOSTNAME=pektin-redis-direktor
+            - REDIS_PASSWORD:${R_PEKTIN_API_PASSWORD}
     server:
         environment:
-            - REDIS_URI=redis://r-pektin-server:${R_PEKTIN_SERVER_PASSWORD}@pektin-redis-direktor:6379
+            - REDIS_HOSTNAME=pektin-redis-direktor
+            - REDIS_PASSWORD:${R_PEKTIN_SERVER_PASSWORD}
 
 networks:
     pektin-gewerkschaft:
