@@ -27,6 +27,7 @@ services:
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolalloworiginlist: "*"
             traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowheaders: authorization,content-type
+            traefik.http.middlewares.pektin-recursor-cors.headers.accessControlMaxAge: 86400
             # add auth
             traefik.http.middlewares.pektin-recursor-auth.basicauth.users: ${RECURSOR_AUTH}
 

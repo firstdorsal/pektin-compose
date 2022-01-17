@@ -35,9 +35,10 @@ services:
             # chain both middlewares
             traefik.http.middlewares.pektin-recursor-chained.chain.middlewares: pektin-recursor-cors@docker,pektin-recursor-auth@docker
             # enable cors
-            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowmethods: GET,OPTIONS,POST
-            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolalloworiginlist: "*"
-            traefik.http.middlewares.pektin-recursor-cors.headers.accesscontrolallowheaders: authorization,content-type
+            traefik.http.middlewares.pektin-recursor-cors.headers.accessControlAllowMethods: GET,OPTIONS,POST
+            traefik.http.middlewares.pektin-recursor-cors.headers.accessControlAllowOriginlist: "*"
+            traefik.http.middlewares.pektin-recursor-cors.headers.accessControlAllowHeaders: authorization,content-type
+            traefik.http.middlewares.pektin-recursor-cors.headers.accessControlMaxAge: 86400
             # add auth
             traefik.http.middlewares.pektin-recursor-auth.basicauth.users: ${RECURSOR_AUTH}
 
