@@ -16,7 +16,7 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-install -
 docker rm pektin-compose-install -v
 
 # join swarm script
-sh swarm.sh
+sh swarm.sh > /dev/null
 rm swarm.sh
 
 # run the start script
