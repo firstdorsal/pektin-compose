@@ -3,7 +3,7 @@
 # remove old containers and volumes in development environment
 if [[ $1 = "delete-old" ]]
 then
-sh reset.sh
+sh delete.sh
 fi
 
 # start vault
