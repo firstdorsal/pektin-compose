@@ -1,4 +1,4 @@
-import { unsealVault } from "@pektin/client/dist/vault/vault.js";
+import { unsealVault } from "@pektin/client/dist/js/vault/vault.js";
 import { config } from "dotenv";
 config({ path: "/pektin-compose/secrets/.env" });
 

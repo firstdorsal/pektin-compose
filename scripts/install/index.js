@@ -1,2 +1,2 @@
-import { installPektinCompose } from "@pektin/client/dist/compose/install.js";
+import { installPektinCompose } from "@pektin/client/dist/js/compose/install.js";
 await installPektinCompose();
