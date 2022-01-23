@@ -117,6 +117,7 @@
         "sources": {
             "type": "object",
             "description": "where to pull the sources from; if unset will be pulled from github; will only be used if buildFromSource is set to true",
+            "required": ["server", "api", "ui"],
             "properties": {
                 "server": {
                     "type": "string",

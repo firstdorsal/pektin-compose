@@ -58,7 +58,7 @@ services:
         container_name: pektin-server
         restart: always
         environment:
-            - REDIS_PASSWORD=${R_PEKTIN_API_PASSWORD}
+            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
         networks:
             - db
             - rp
