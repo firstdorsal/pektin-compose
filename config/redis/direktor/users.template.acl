@@ -1,4 +1,4 @@
 user default off
-user r-pektin-server on resetchannels allkeys -@all +GET +MGET #R_PEKTIN_SERVER_PASSWORD_SHA256
+user r-pektin-server on resetchannels allkeys -@all +GET +MGET +KEYS #R_PEKTIN_SERVER_PASSWORD_SHA256
 user r-pektin-api on resetchannels allkeys -@all +SET +GET +MSET +MGET +DEL +KEYS #R_PEKTIN_API_PASSWORD_SHA256
 user r-pektin-gewerkschaft on resetchannels allkeys -@all +PSYNC +REPLCONF +PING #R_PEKTIN_GEWERKSCHAFT_PASSWORD_SHA256
