@@ -8,6 +8,7 @@ fi
 
 # clean up pektin-install
 docker rm pektin-compose-check-config -v
+
 # check config
 docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-check-config --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it $(docker build -q ./scripts/check-config/ --no-cache) || exit 1
 
