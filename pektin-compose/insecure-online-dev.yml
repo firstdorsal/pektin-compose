@@ -14,7 +14,7 @@ services:
             - 6379:6379
     ribston:
         ports:
-            - 8888:80
+            - 8081:80
     server:
         ports:
             - 53:53/udp

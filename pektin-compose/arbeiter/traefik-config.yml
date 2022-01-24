@@ -5,8 +5,8 @@ services:
             traefik.enable: "true"
             traefik.docker.network: rp
             traefik.tcp.routers.pektin-server-dot.tls.certresolver: "default"
-            traefik.tcp.routers.pektin-server-dot.tls.domains[0].main: "${DOMAIN}"
-            traefik.tcp.routers.pektin-server-dot.tls.domains[0].sans: "*.${DOMAIN}"
+            traefik.tcp.routers.pektin-server-dot.tls.domains[0].main: "${SERVER_DOMAIN}"
+            traefik.tcp.routers.pektin-server-dot.tls.domains[0].sans: "*.${SERVER_DOMAIN}"
             traefik.tcp.routers.pektin-server-dot.rule: "HostSNI(`*`)"
             traefik.tcp.routers.pektin-server-dot.tls: "true"
             traefik.tcp.routers.pektin-server-dot.entrypoints: "dot"

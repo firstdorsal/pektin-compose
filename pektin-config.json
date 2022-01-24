@@ -1,16 +1,36 @@
 {
-    "domain": "pektin.xyz",
-    "nameServers": [
+    "ui": {
+        "enabled": true,
+        "domain": "pektin.xyz",
+        "subDomain": "ui-pektin"
+    },
+    "api": {
+        "enabled": true,
+        "domain": "pektin.xyz",
+        "subDomain": "api-pektin"
+    },
+    "vault": {
+        "enabled": true,
+        "domain": "pektin.xyz",
+        "subDomain": "vault-pektin"
+    },
+    "recursor": {
+        "enabled": true,
+        "domain": "pektin.xyz",
+        "subDomain": "recursor-pektin"
+    },
+    "nodes": [
         {
-            "subDomain": "ns1",
+            "main": true,
+            "name": "balduin",
             "ips": ["2a01:4f9:c010:9298::1"],
             "legacyIps": ["65.108.88.212"]
         },
         {
-            "subDomain": "ns2",
             "ips": ["2a01:4f8:c0c:22d8::1"],
             "legacyIps": ["23.88.59.245"],
-            "createSingleScript": {
+            "name": "gustav-gans",
+            "setup": {
                 "system": "ubuntu",
                 "root": {
                     "disableSystemdResolved": true,
@@ -22,31 +42,37 @@
             }
         }
     ],
-    "multiNode": true,
-
-    "uiSubDomain": "ui-pektin",
-    "apiSubDomain": "api-pektin",
-    "vaultSubDomain": "vault-pektin",
-    "recursorSubDomain": "recursor-pektin",
-
-    "enableUi": true,
-    "enableApi": true,
-    "enableRecursor": true,
-
-    "enableRotate": true,
-    "createCerts": true,
-    "letsencryptEmail": "letsencrypt@pektin.xyz",
-
-    "configureMainDomain": true,
-
-    "proxyConfig": "traefik",
-    "createProxy": true,
-
-    "buildFromSource": true,
-    "sources": {
-        "server": "/home/paul/Documents/pektin/pektin-server",
-        "api": "/home/paul/Documents/pektin/pektin-api",
-        "ui": "/home/paul/Documents/pektin/pektin-ui"
+    "nameservers": [
+        { "subDomain": "ns1", "domain": "pektin.xyz", "node": "balduin", "main": true },
+        { "subDomain": "ns2", "domain": "pektin.xyz", "node": "gustav-gans" }
+    ],
+    "certificates": {
+        "enabled": true,
+        "letsencryptEmail": "letsencrypt@pektin.xyz"
     },
-    "dev": "local"
+    "reverseProxy": {
+        "createTraefik": true,
+        "applyTraefikConfig": true
+    },
+    "registrarApi": {
+        "enabled": false
+    },
+    "build": {
+        "server": {
+            "enabled": true,
+            "path": "/home/paul/Documents/pektin/pektin-server"
+        },
+        "api": {
+            "enabled": true,
+            "path": "/home/paul/Documents/pektin/pektin-api"
+        },
+        "ui": {
+            "enabled": true,
+            "path": "/home/paul/Documents/pektin/pektin-ui"
+        }
+    },
+    "devmode": {
+        "enabled": true,
+        "type": "local"
+    }
 }

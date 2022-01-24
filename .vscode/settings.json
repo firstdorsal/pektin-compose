@@ -2,7 +2,7 @@
     "json.schemas": [
         {
             "fileMatch": ["pektin-config.json"],
-            "url": "./.schema/pektin-config.schema.json"
+            "url": "https://git.y.gy/pektin/pektin-config/-/raw/main/schema.json"
         }
     ]
 }

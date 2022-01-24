@@ -1,0 +1,4 @@
+version: "3.7"
+services:
+    api:
+        build: ${API_BUILD_PATH}

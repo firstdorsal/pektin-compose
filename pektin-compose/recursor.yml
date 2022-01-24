@@ -12,9 +12,9 @@ services:
             traefik.enable: "true"
             traefik.docker.network: rp
             traefik.http.routers.pektin-recursor.tls.certresolver: "default"
-            traefik.http.routers.pektin-recursor.tls.domains[0].main: "${DOMAIN}"
-            traefik.http.routers.pektin-recursor.tls.domains[0].sans: "*.${DOMAIN}"
-            traefik.http.routers.pektin-recursor.rule: "Host(`${RECURSOR_SUBDOMAIN}.${DOMAIN}`)"
+            traefik.http.routers.pektin-recursor.tls.domains[0].main: "${RECURSOR_DOMAIN}"
+            traefik.http.routers.pektin-recursor.tls.domains[0].sans: "*.${RECURSOR_DOMAIN}"
+            traefik.http.routers.pektin-recursor.rule: "Host(`${RECURSOR_CONCAT_DOMAIN}`)"
             traefik.http.routers.pektin-recursor.tls: "true"
             traefik.http.routers.pektin-recursor.entrypoints: "websecure"
             traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"
