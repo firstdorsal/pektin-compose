@@ -2,7 +2,7 @@ version: "3.7"
 services:
     rp:
         container_name: rp
-        image: traefik
+        image: traefik/traefik:2.6
         restart: always
         ports:
             - 80:80/tcp
@@ -21,7 +21,7 @@ services:
             - --experimental.http3=true
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
-            - --entrypoints.websecure.enablehttp3=true
+            - --entrypoints.websecure.http3={}
             - --certificatesresolvers.default.acme.dnschallenge=true
             - --certificatesresolvers.default.acme.dnschallenge.provider=pdns
             - --certificatesresolvers.default.acme.email=${LETSENCRYPT_EMAIL}
