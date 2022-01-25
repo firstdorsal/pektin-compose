@@ -11,7 +11,7 @@ services:
             - ../config/vault/:/vault/config/
             - ../logs/vault/:/vault/logs
         command: server
-        # TODO: GENERATE FULL VAULT API URL WITH INSTALL INTO .env
+        #
         #environment:
         #  - VAULT_API_ADDR=
         networks:
