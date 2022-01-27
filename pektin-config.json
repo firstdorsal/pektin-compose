@@ -63,11 +63,11 @@
             "path": "/home/paul/Documents/pektin/pektin-server"
         },
         "api": {
-            "enabled": false,
+            "enabled": true,
             "path": "/home/paul/Documents/pektin/pektin-api"
         },
         "ui": {
-            "enabled": false,
+            "enabled": true,
             "path": "/home/paul/Documents/pektin/pektin-ui"
         }
     },
