@@ -2,7 +2,7 @@ version: "3.7"
 services:
     rp:
         container_name: rp
-        image: traefik
+        image: traefik:2.6
         restart: always
         ports:
             - 80:80
