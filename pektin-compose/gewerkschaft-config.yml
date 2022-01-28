@@ -3,11 +3,9 @@ services:
     redis:
         container_name: pektin-redis-direktor
         volumes:
-            - ../config/redis/direktor/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf:ro
+            - ../config/redis/direktor/redis.conf:/redis.conf:ro
         networks:
             - pektin-gewerkschaft
-        environment:
-            - REDIS_REPLICATION_MODE=master
     api:
         environment:
             - REDIS_HOSTNAME=pektin-redis-direktor

@@ -42,17 +42,17 @@ services:
             - vault
             - ribston
     redis:
-        image: bitnami/redis
+        image: redis:6.2.6-alpine
         user: root
         container_name: pektin-redis
         restart: always
         volumes:
-            - db:/bitnami/redis/data
-            - ../config/redis/redis.conf:/opt/bitnami/redis/mounted-etc/redis.conf:ro
-            - ../secrets/redis/users.acl:/opt/bitnami/redis/mounted-etc/users.acl:ro
+            - db:/data
+            - ../config/redis/redis.conf:/redis.conf:ro
+            - ../secrets/redis/users.acl:/users.acl:ro
         networks:
             - db
-        command: "redis-server /opt/bitnami/redis/mounted-etc/redis.conf"
+        command: "redis-server /redis.conf"
     server:
         image: pektin/server
         container_name: pektin-server
