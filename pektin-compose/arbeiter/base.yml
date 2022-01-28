@@ -7,7 +7,7 @@ services:
         restart: always
         volumes:
             - db:/data
-            - ../../config/redis/arbeiter/redis.conf:/redis.conf:ro
+            - ../../secrets/redis/redis.conf:/redis.conf:ro
             - ../../secrets/redis/users.acl:/users.acl:ro
         networks:
             - db
