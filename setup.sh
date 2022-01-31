@@ -11,7 +11,7 @@ echo -e "${RED}---------     RESET FINISHED      ---------${NO_COLOR}"
 fi
 
 # clean up pektin-config
-docker rm pektin-compose-check-config -v &>  /dev/null
+docker rm pektin-compose-check-config -v &> /dev/null
 
 # check config
 docker build --no-cache -q ./scripts/check-config/ -t "pektin-compose-check-config" > /dev/null
