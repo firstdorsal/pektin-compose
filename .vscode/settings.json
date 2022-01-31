@@ -1,7 +1,7 @@
 {
     "json.schemas": [
         {
-            "fileMatch": ["pektin-config.json"],
+            "fileMatch": ["*.pc.json"],
             "url": "https://git.y.gy/pektin/pektin-config/-/raw/main/pektin-config.schema.json"
         }
     ],

@@ -6,3 +6,4 @@ stop.sh
 update.sh
 pektin-compose/src
 arbeiter/*
+*.secret.json

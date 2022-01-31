@@ -4,6 +4,8 @@
 
 # TODO: figure out traefik certificate for multiple server domains and sni problem statet in js client install
 
+# TODO Redis add capabilities to repl account
+
 include the password for the replicant in the redis.conf like this:
 
 ```
