@@ -1,0 +1,5 @@
+version: "3.7"
+services:
+    rp:
+        volumes:
+            - ../config/traefik/proxy/crt.yml:/dynamic/proxy/crt.yml

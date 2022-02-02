@@ -1,0 +1,28 @@
+http:
+    routers:
+        proxy-gandi:
+            entryPoints:
+                - web
+            middlewares:
+                - strip-gandi
+                - cors-gandi
+            service: proxy-gandi
+            rule: PathPrefix(`/proxy-gandi`)
+
+    services:
+        proxy-gandi:
+            loadBalancer:
+                passHostHeader: false
+                servers:
+                    - url: https://api.gandi.net
+
+    middlewares:
+        strip-gandi:
+            stripPrefix:
+                prefixes:
+                    - /proxy-gandi
+        cors-gandi:
+            headers:
+                accessControlAllowMethods: GET,OPTIONS,POST,DELETE
+                accessControlAllowOriginlist: "*"
+                accessControlMaxAge: 86400

@@ -1,0 +1,28 @@
+http:
+    routers:
+        proxy-crt:
+            entryPoints:
+                - web
+            middlewares:
+                - strip-crt
+                - cors-crt
+            service: proxy-crt
+            rule: PathPrefix(`/proxy-crt`)
+
+    services:
+        proxy-crt:
+            loadBalancer:
+                passHostHeader: false
+                servers:
+                    - url: https://crt.sh
+
+    middlewares:
+        strip-crt:
+            stripPrefix:
+                prefixes:
+                    - /proxy-crt
+        cors-crt:
+            headers:
+                accessControlAllowMethods: GET,OPTIONS
+                accessControlAllowOriginlist: "*"
+                accessControlMaxAge: 86400

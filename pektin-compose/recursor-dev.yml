@@ -12,7 +12,19 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
         command:
             - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
             - --entrypoints.web.address=:80
+            - --providers.file.directory=/dynamic/
+            - --api
+            - --log.level=DEBUG
+        labels:
+            # enable this service
+            traefik.enable: true
+            traefik.docker.network: rp
+            # dashboard
+            traefik.http.routers.api.rule: Host(`traefik.localhost`)
+            traefik.http.routers.api.entrypoints: web
+            traefik.http.routers.api.service: api@internal
     recursor:
         image: pektin/bind-alpine-docker
         container_name: pektin-recursor
@@ -22,15 +34,15 @@ services:
         networks:
             - rp
         labels:
-            traefik.enable: "true"
+            traefik.enable: true
             traefik.docker.network: rp
 
-            traefik.http.routers.pektin-recursor.rule: "PathPrefix(`/dns-query`)"
-            traefik.http.routers.pektin-recursor.entrypoints: "web"
+            traefik.http.routers.pektin-recursor.rule: PathPrefix(`/dns-query`)
+            traefik.http.routers.pektin-recursor.entrypoints: web
             traefik.http.routers.pektin-recursor.middlewares: pektin-recursor-chained@docker
 
-            traefik.http.services.pektin-recursor.loadbalancer.server.port: "80"
-            traefik.http.services.pektin-recursor.loadbalancer.server.scheme: "h2c"
+            traefik.http.services.pektin-recursor.loadbalancer.server.port: 80
+            traefik.http.services.pektin-recursor.loadbalancer.server.scheme: h2c
 
             # chain both middlewares
             traefik.http.middlewares.pektin-recursor-chained.chain.middlewares: pektin-recursor-cors@docker,pektin-recursor-auth@docker

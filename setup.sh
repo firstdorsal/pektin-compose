@@ -3,11 +3,20 @@ RED='\u001b[1;91m' ; NO_COLOR='\u001b[0m'
 # remove old containers and volumes in development environment
 if [[ $1 = "delete-old" ]]
 then
-echo -e "${RED}---------   STARTING FULL RESET   ---------"
-echo -e "        PRESS 'CTRL' + 'C' TO ABORT        ${NO_COLOR}"
-sleep 2
+echo -e "${RED}--------   STARTING FULL RESET   -------"
+echo ""
+echo -e       "       PRESS 'CTRL' + 'C' TO ABORT      "
+echo ""
+sleep 1
+echo -en      "█████████████"
+sleep 1
+echo -en                    "████████████"
+sleep 1
+echo -en                                 "███████████████${NO_COLOR}"
+sleep 1
+echo ""
 sh reset.sh
-echo -e "${RED}---------     RESET FINISHED      ---------${NO_COLOR}"
+echo -e "${RED}--------     RESET FINISHED      --------${NO_COLOR}"
 fi
 
 # clean up pektin-config

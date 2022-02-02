@@ -1,0 +1,5 @@
+version: "3.7"
+services:
+    rp:
+        volumes:
+            - ../config/traefik/proxy/gandi.yml:/dynamic/proxy/gandi.yml
