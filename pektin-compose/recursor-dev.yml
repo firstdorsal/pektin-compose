@@ -25,6 +25,7 @@ services:
             traefik.http.routers.api.rule: Host(`traefik.localhost`)
             traefik.http.routers.api.entrypoints: web
             traefik.http.routers.api.service: api@internal
+
     recursor:
         image: pektin/bind-alpine-docker
         container_name: pektin-recursor

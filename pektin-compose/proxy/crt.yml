@@ -1,5 +1,16 @@
 version: "3.7"
 services:
     rp:
-        volumes:
-            - ../config/traefik/proxy/crt.yml:/dynamic/proxy/crt.yml
+        labels:
+            traefik.http.routers.proxy-crt.entryPoints: web
+            traefik.http.routers.proxy-crt.service: proxy-crt
+            traefik.http.routers.proxy-crt.rule: PathPrefix(`/proxy-crt`)
+            traefik.http.routers.proxy-crt.middlewares: strip-crt, cors-crt
+
+            # traefik.http.services.proxy-crt.loadBalancer.server.url: https://crt.sh
+
+            traefik.http.middlewares.strip-crt.stripPrefix.prefixes: /proxy-crt
+
+            traefik.http.middlewares.cors-crt.headers.accessControlAllowMethods: GET,OPTIONS
+            traefik.http.middlewares.cors-crt.headers.accessControlAllowOriginlist: "*"
+            traefik.http.middlewares.cors-crt.headers.accessControlMaxAge: 86400
