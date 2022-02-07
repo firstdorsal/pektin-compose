@@ -9,6 +9,6 @@
         "start": "node --no-warnings index.js"
     },
     "dependencies": {
-        "@pektin/client": "^1.0.27"
+        "@pektin/client": "^1.1.47"
     }
 }

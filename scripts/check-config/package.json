@@ -9,6 +9,6 @@
         "start": "node --no-warnings index.js"
     },
     "dependencies": {
-        "@pektin/config": "^1.0.0"
+        "@pektin/config": "^1.0.38"
     }
 }

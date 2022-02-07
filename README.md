@@ -17,3 +17,28 @@ protected-mode yes
 ```
 
 curl --http2-prior-knowledge -H 'accept: application/dns-message' -v 'http://localhost:8090/dns-query?dns=jz4BMAABAAAAAAAACXZvbmZvcmVsbAJkZQAAAQAB' | base64
+
+# temp pektin domain
+
+create a pektin.io or similar subdomain for the installer to make routing work:
+
+installer wants to use:
+
+test.de.
+ns1.test.de.
+ns2.test.de.
+ui-pektin.test.de.
+etc.
+
+but their domain is not set up yet/propagated
+
+temporary domain from pektin.io to the rescue
+
+pektin.io creates a random string that is used as a prefix:
+
+test.de.abcde.pektin.zone
+ns1.test.de.abcde.pektin.zone
+ns2.test.de.abcde.pektin.zone
+test.de.abcde.pektin.zone
+
+will be deleted after 7 days

@@ -7,7 +7,7 @@
     "ui": true,
     "listener": {
         "tcp": {
-            "address": "[::]:8200",
+            "address": "[::]:80",
             "tls_disable": 1,
             "proxy_protocol_behaviour": "use_always"
         }
