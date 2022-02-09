@@ -2,23 +2,27 @@
     "services": {
         "ui": {
             "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "ui-pektin"
+            "domain": "яндекс.рф",
+            "subDomain": "ui-н"
         },
         "api": {
-            "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "api-pektin"
+            "domain": "яндекс.рф",
+            "subDomain": "api-н"
         },
         "vault": {
-            "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "vault-pektin"
+            "domain": "яндекс.рф",
+            "subDomain": "vault-н"
         },
         "recursor": {
             "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "recursor-pektin"
+            "domain": "яндекс.рф",
+            "subDomain": "recursor-н"
+        },
+        "ribston": {
+            "enabled": true
+        },
+        "opa": {
+            "enabled": false
         }
     },
     "nodes": [
@@ -28,37 +32,43 @@
             "ips": ["2a01:4f9:c01f:80::"]
         }
     ],
-    "nameservers": [
-        { "subDomain": "ns1", "domain": "pektin.club.", "node": "balduin", "main": true }
-    ],
+    "nameservers": [{ "subDomain": "ян1", "domain": "яндекс.рф", "node": "balduin", "main": true }],
     "certificates": {
         "enabled": true,
-        "letsencryptEmail": "letsencrypt@pektin.club"
+        "letsencryptEmail": "letsencrypt@яндекс.рф"
     },
-
+    "usePolicies": "ribston",
     "build": {
         "server": {
-            "enabled": true,
+            "enabled": false,
             "path": "/home/paul/Documents/pektin/pektin-server"
         },
         "api": {
-            "enabled": true,
+            "enabled": false,
             "path": "/home/paul/Documents/pektin/pektin-api"
         },
         "ui": {
             "enabled": false,
             "path": "/home/paul/Documents/pektin/pektin-ui"
+        },
+        "ribston": {
+            "enabled": false,
+            "path": "/home/paul/Documents/pektin/ribston"
+        },
+        "recursor": {
+            "enabled": false,
+            "path": ""
         }
     },
     "reverseProxy": {
         "createTraefik": true,
         "routing": "local",
         "tls": false,
-        "useLegacyIp": false,
-        "tempPektinZone": true,
+        "tempZone": { "enabled": true, "provider": "pektin.zone" },
+        "traefikUi": false,
         "external": {
-            "domain": "pektin.club.",
-            "subDomain": "pektin-proxy",
+            "domain": "яндекс.рф",
+            "subDomain": "pektin-де",
             "enabled": true,
             "services": { "gandi": true, "crt": true }
         }

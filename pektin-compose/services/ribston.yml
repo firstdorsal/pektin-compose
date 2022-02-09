@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+    ribston:
+        container_name: pektin-ribston
+        restart: always
+        image: pektin/ribston
+        networks:
+            - ribston
+    api:
+        networks:
+            - ribston
+        depends_on:
+            - ribston
+networks:
+    ribston:

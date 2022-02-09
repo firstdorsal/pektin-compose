@@ -36,9 +36,11 @@ temporary domain from pektin.io to the rescue
 
 pektin.io creates a random string that is used as a prefix:
 
-test.de.abcde.pektin.zone
-ns1.test.de.abcde.pektin.zone
-ns2.test.de.abcde.pektin.zone
-test.de.abcde.pektin.zone
+abcde.pektin.zone
+ns1.abcde.pektin.zone
+ns2.abcde.pektin.zone
+pektin-ui.abcde.pektin.zone
+
+domains will be replaced as they instead could be easily enumerated in crt.sh by searching for pektin.zone
 
 will be deleted after 7 days

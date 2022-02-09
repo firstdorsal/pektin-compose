@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+    opa:
+        container_name: pektin-opa
+        restart: always
+        image: openpolicyagent/opa:latest
+        networks:
+            - opa
+        command: "run --server --addr :80"
+    api:
+        networks:
+            - opa
+        depends_on:
+            - opa
+networks:
+    opa:

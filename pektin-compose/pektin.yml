@@ -17,14 +17,6 @@ services:
         networks:
             - vault
             - rp
-    ui:
-        image: pektin/ui
-        container_name: pektin-ui
-        restart: always
-        environment:
-            - CSP_CONNECT_SRC=${CSP_CONNECT_SRC}
-        networks:
-            - rp
     api:
         image: pektin/api
         container_name: pektin-api
@@ -36,11 +28,9 @@ services:
             - vault
             - db
             - rp
-            - ribston
         depends_on:
             - redis
             - vault
-            - ribston
     redis:
         image: redis:6.2.6-alpine
         user: root
@@ -67,19 +57,12 @@ services:
             - 53:53/tcp
         depends_on:
             - redis
-    ribston:
-        container_name: pektin-ribston
-        restart: always
-        image: pektin/ribston
-        networks:
-            - ribston
 
 networks:
     vault:
     db:
     rp:
         name: rp
-    ribston:
 
 volumes:
     vault:

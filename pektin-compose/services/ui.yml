@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+    ui:
+        image: pektin/ui
+        container_name: pektin-ui
+        restart: always
+        environment:
+            - CSP_CONNECT_SRC=${CSP_CONNECT_SRC}
+        networks:
+            - rp
+networks:
+    rp:
+        name: rp

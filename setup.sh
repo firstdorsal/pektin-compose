@@ -19,6 +19,9 @@ sh reset.sh
 echo -e "${RED}--------     RESET FINISHED      --------${NO_COLOR}"
 fi
 
+mkdir secrets
+echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PASSWORD='warnings'\nR_PEKTIN_API_PASSWORD='docker'\n" > secrets/.env
+
 # clean up pektin-config
 docker rm pektin-compose-check-config -v &> /dev/null
 
@@ -30,7 +33,7 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-check-con
 docker rm pektin-compose-check-config -v &> /dev/null
 
 # start vault
-docker-compose -f pektin-compose/pektin.yml up -d vault
+docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
 docker build --no-cache -q ./scripts/install/ -t "pektin-compose-install" > /dev/null
@@ -40,8 +43,8 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-install -
 docker rm pektin-compose-install -v
 
 # join swarm script
-sh swarm.sh > /dev/null
-rm swarm.sh
+sh swarm.sh &> /dev/null
+rm swarm.sh &> /dev/null
 
 # run the start script
 sh start.sh
