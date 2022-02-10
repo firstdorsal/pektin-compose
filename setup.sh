@@ -1,7 +1,21 @@
-#!/bin/bash
+#!/bin/sh
+for i in "$@"; do
+  case $i in
+    -s=*|--script-path=*)
+      SCRIPT_PATH="${i#*=}"
+      shift # past argument=value
+      ;;
+    -d=*|--delete-old=*)
+      DELETE_OLD="${i#*=}"
+      shift # past argument=value
+      ;;
+  esac
+done
+
+
 RED='\u001b[1;91m' ; NO_COLOR='\u001b[0m' 
 # remove old containers and volumes in development environment
-if [[ $1 = "delete-old" ]]
+if [[ $DELETE_OLD = "true" ]]
 then
 echo -e "${RED}--------   STARTING FULL RESET   -------"
 echo ""
@@ -19,28 +33,31 @@ sh reset.sh
 echo -e "${RED}--------     RESET FINISHED      --------${NO_COLOR}"
 fi
 
+docker rm pektin-scripts -v &> /dev/null
+
+
+if [[ ! -z ${SCRIPT_PATH} ]]
+then
+    echo "Using the local pektin scripts docker image from $SCRIPT_PATH"
+    docker build ${SCRIPT_PATH} -t "pektin-scripts" > /dev/null
+else
+    docker build ./scripts/ -t "pektin-scripts" > /dev/null
+fi
+
 mkdir secrets
 echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PASSWORD='warnings'\nR_PEKTIN_API_PASSWORD='docker'\nUSE_POLICIES='foo'\n" > secrets/.env
 
-# clean up pektin-config
-docker rm pektin-compose-check-config -v &> /dev/null
-
 # check config
-docker build --no-cache -q ./scripts/check-config/ -t "pektin-compose-check-config" > /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-check-config --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-compose-check-config || exit 1
+docker rm pektin-scripts -v &> /dev/null
+docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js check-config || exit 1
 
-# clean up pektin-config
-docker rm pektin-compose-check-config -v &> /dev/null
 
 # start vault
 docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
-docker build --no-cache -q ./scripts/install/ -t "pektin-compose-install" > /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-install --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-compose-install
-
-# clean up pektin-install
-docker rm pektin-compose-install -v
+docker rm pektin-scripts -v &> /dev/null
+docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
 
 # join swarm script
 sh swarm.sh &> /dev/null
@@ -50,8 +67,6 @@ rm swarm.sh &> /dev/null
 sh start.sh
 
 # run pektin-first-start
-docker build --no-cache -q ./scripts/first-start/ -t "pektin-compose-first-start"  > /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-compose-first-start --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-compose-first-start
-
-# clean up pektin-first-start
-docker rm pektin-compose-first-start -v
+docker rm pektin-scripts -v &> /dev/null
+docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js first-start 
+docker rm pektin-scripts -v &> /dev/null

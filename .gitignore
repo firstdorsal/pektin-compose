@@ -4,6 +4,7 @@ secrets
 start.sh
 stop.sh
 update.sh
+updateConfig.sh
 pektin-compose/src
 arbeiter/*
 *.secret.json
