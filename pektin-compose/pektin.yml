@@ -1,7 +1,7 @@
 version: "3.7"
 services:
     vault:
-        image: vault
+        image: pektin/vault
         container_name: pektin-vault
         restart: always
         cap_add:
@@ -9,9 +9,7 @@ services:
         volumes:
             - vault:/vault/file/
             - ../config/vault/:/vault/config/
-            - ../logs/vault/:/vault/logs
         command: server
-        #
         #environment:
         #  - VAULT_API_ADDR=
         networks:
@@ -24,6 +22,7 @@ services:
         environment:
             - V_PEKTIN_API_PASSWORD=${V_PEKTIN_API_PASSWORD}
             - REDIS_PASSWORD=${R_PEKTIN_API_PASSWORD}
+            - USE_POLICIES=${USE_POLICIES}
         networks:
             - vault
             - db

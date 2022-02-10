@@ -30,9 +30,16 @@
             "main": true,
             "name": "balduin",
             "ips": ["2a01:4f9:c01f:80::"]
+        },
+        {
+            "name": "gustav",
+            "ips": ["2a01:4f9:c01f:80::"]
         }
     ],
-    "nameservers": [{ "subDomain": "ян1", "domain": "яндекс.рф", "node": "balduin", "main": true }],
+    "nameservers": [
+        { "subDomain": "ян1", "domain": "яндекс.рф", "node": "balduin", "main": true },
+        { "subDomain": "ян2", "domain": "яндекс.рф", "node": "gustav" }
+    ],
     "certificates": {
         "enabled": true,
         "letsencryptEmail": "letsencrypt@яндекс.рф"
@@ -56,6 +63,10 @@
             "path": "/home/paul/Documents/pektin/ribston"
         },
         "recursor": {
+            "enabled": false,
+            "path": ""
+        },
+        "vault": {
             "enabled": false,
             "path": ""
         }

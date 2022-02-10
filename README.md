@@ -1,3 +1,14 @@
+# required
+
+-   docker
+-   docker-compose
+-   rm
+-   git
+-   sh
+-   grep
+-   echo
+-   sleep
+
 # TODO create distinct redis passwords for different nodes
 
 # TODO: GENERATE FULL VAULT API URL WITH INSTALL INTO .env
