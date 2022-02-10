@@ -9,6 +9,16 @@
 -   echo
 -   sleep
 
+# use
+
+`sh setup.sh`
+
+use local scripts dockerfile from this path: `-s=../pektin-js-client/`
+delete everything: `-d=true`
+
+in devmode this deletes everything and uses the local scripts dockerfile if present
+`sh setup.sh -s=../pektin-js-client/ -d=true`
+
 # TODO create distinct redis passwords for different nodes
 
 # TODO: GENERATE FULL VAULT API URL WITH INSTALL INTO .env
