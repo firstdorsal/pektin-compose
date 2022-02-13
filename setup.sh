@@ -47,9 +47,6 @@ fi
 mkdir secrets
 echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PASSWORD='warnings'\nR_PEKTIN_API_PASSWORD='docker'\nUSE_POLICIES='foo'\n" > secrets/.env
 
-# check config
-docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js check-config || exit 1
 
 
 # start vault
@@ -57,7 +54,7 @@ docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
 docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network container:pektin-vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
+docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
 
 # join swarm script
 sh swarm.sh &> /dev/null

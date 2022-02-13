@@ -3,7 +3,7 @@
         "ui": {
             "enabled": true,
             "domain": "яндекс.рф",
-            "subDomain": "ui"
+            "subDomain": "max-krass-paul"
         },
         "api": {
             "domain": "яндекс.рф",
@@ -40,9 +40,9 @@
         { "subDomain": "ян1", "domain": "яндекс.рф", "node": "balduin", "main": true },
         { "subDomain": "ян2", "domain": "яндекс.рф", "node": "gustav" }
     ],
-    "certificates": {
+    "letsencrypt": {
         "enabled": true,
-        "letsencryptEmail": "letsencrypt@яндекс.рф"
+        "letsencryptEmail": "test@яндекс.рф"
     },
     "usePolicies": "ribston",
     "build": {
@@ -51,7 +51,7 @@
             "path": "/home/paul/Documents/pektin/pektin-server"
         },
         "api": {
-            "enabled": false,
+            "enabled": true,
             "path": "/home/paul/Documents/pektin/pektin-api"
         },
         "ui": {
@@ -75,7 +75,7 @@
         "createTraefik": true,
         "routing": "local",
         "tls": false,
-        "tempZone": { "enabled": true, "provider": "pektin.zone" },
+        "tempZone": { "enabled": true, "provider": "pektin.zone", "routing": "local" },
         "traefikUi": false,
         "external": {
             "domain": "яндекс.рф",

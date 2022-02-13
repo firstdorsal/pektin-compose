@@ -18,6 +18,8 @@ services:
             - ../secrets/traefik/:/traefik/
         command:
             - --configFile=/traefik/static.yml
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
 
 networks:
     rp:
