@@ -54,7 +54,7 @@ docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
 docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
+docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name pektin-scripts --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
 
 # join swarm script
 sh swarm.sh &> /dev/null
@@ -65,5 +65,5 @@ sh start.sh
 
 # run pektin-first-start
 docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --name pektin-scripts --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js first-start 
+docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name pektin-scripts --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js first-start 
 docker rm pektin-scripts -v &> /dev/null

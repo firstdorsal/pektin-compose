@@ -9,11 +9,9 @@ services:
     api:
         environment:
             - REDIS_HOSTNAME=pektin-redis-direktor
-            - REDIS_PASSWORD=${R_PEKTIN_API_PASSWORD}
     server:
         environment:
             - REDIS_HOSTNAME=pektin-redis-direktor
-            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
 
 networks:
     pektin-gewerkschaft:

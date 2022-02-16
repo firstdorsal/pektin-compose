@@ -9,7 +9,7 @@ services:
         volumes:
             - vault:/vault/file/
             - ../config/vault/:/vault/config/
-        command: server
+        command: ["server"]
         #environment:
         #  - VAULT_API_ADDR=
         networks:
@@ -41,7 +41,7 @@ services:
             - ../secrets/redis/users.acl:/users.acl:ro
         networks:
             - db
-        command: "redis-server /redis.conf"
+        command: ["redis-server", "/redis.conf"]
     server:
         image: pektin/server
         container_name: pektin-server
