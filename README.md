@@ -29,6 +29,7 @@ in devmode this deletes everything and uses the local scripts dockerfile if pres
 
 # TODO Redis add capabilities to repl account
 
+
 include the password for the replicant in the redis.conf like this:
 
 ```

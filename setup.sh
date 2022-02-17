@@ -1,4 +1,7 @@
 #!/bin/sh
+SCRIPTS_IMAGE_NAME=pektin/scripts
+SCRIPTS_CONTAINER_NAME=pektin-scripts
+
 for i in "$@"; do
   case $i in
     -s=*|--script-path=*)
@@ -33,15 +36,15 @@ sh reset.sh
 echo -e "${RED}--------     RESET FINISHED      --------${NO_COLOR}"
 fi
 
-docker rm pektin-scripts -v &> /dev/null
+docker rm ${SCRIPTS_CONTAINER_NAME} -v &> /dev/null
 
 
 if [[ ! -z ${SCRIPT_PATH} ]]
 then
     echo "Using the local pektin scripts docker image from $SCRIPT_PATH"
-    docker build ${SCRIPT_PATH} -t "pektin-scripts" > /dev/null
+    docker build ${SCRIPT_PATH} -t ${SCRIPTS_IMAGE_NAME} > /dev/null
 else
-    docker build ./scripts/ -t "pektin-scripts" > /dev/null
+    docker build ./scripts/ -t ${SCRIPTS_IMAGE_NAME} > /dev/null
 fi
 
 mkdir secrets
@@ -53,8 +56,8 @@ echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PA
 docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
-docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name pektin-scripts --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js install || exit 1
+docker rm ${SCRIPTS_CONTAINER_NAME} -v &> /dev/null
+docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name ${SCRIPTS_CONTAINER_NAME} --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it ${SCRIPTS_IMAGE_NAME} node ./dist/js/install/scripts.js compose-install || exit 1
 
 # join swarm script
 sh swarm.sh &> /dev/null
@@ -64,6 +67,6 @@ rm swarm.sh &> /dev/null
 sh start.sh
 
 # run pektin-first-start
-docker rm pektin-scripts -v &> /dev/null
-docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name pektin-scripts --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it pektin-scripts node ./dist/js/compose/scripts.js first-start 
-docker rm pektin-scripts -v &> /dev/null
+docker rm ${SCRIPTS_CONTAINER_NAME} -v &> /dev/null
+docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --name ${SCRIPTS_CONTAINER_NAME} --network pektin-compose_vault --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it ${SCRIPTS_IMAGE_NAME} node ./dist/js/install/scripts.js compose-first-start 
+docker rm ${SCRIPTS_CONTAINER_NAME} -v &> /dev/null
