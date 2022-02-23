@@ -8,3 +8,4 @@ updateConfig.sh
 pektin-compose/src
 arbeiter/*
 *.secret.json
+your-infos.md

@@ -2,21 +2,21 @@
     "services": {
         "ui": {
             "enabled": true,
-            "domain": "яндекс.рф",
-            "subDomain": "max-krass-paul"
+            "domain": "pektin.club",
+            "subDomain": "ui"
         },
         "api": {
-            "domain": "яндекс.рф",
-            "subDomain": "api-н"
+            "domain": "pektin.club",
+            "subDomain": "api"
         },
         "vault": {
-            "domain": "яндекс.рф",
-            "subDomain": "vault-н"
+            "domain": "pektin.club",
+            "subDomain": "vault"
         },
         "recursor": {
             "enabled": true,
-            "domain": "яндекс.рф",
-            "subDomain": "recursor-н"
+            "domain": "pektin.club",
+            "subDomain": "recursor"
         },
         "ribston": {
             "enabled": true
@@ -37,12 +37,13 @@
         }
     ],
     "nameservers": [
-        { "subDomain": "ян1", "domain": "яндекс.рф", "node": "balduin", "main": true },
-        { "subDomain": "ян2", "domain": "яндекс.рф", "node": "gustav" }
+        { "subDomain": "ns1", "domain": "pektin.club", "node": "balduin", "main": true },
+        { "subDomain": "ns2", "domain": "pektin.club", "node": "gustav" },
+        { "subDomain": "ns1", "domain": "toll.club", "node": "balduin", "main": true }
     ],
     "letsencrypt": {
         "enabled": true,
-        "letsencryptEmail": "test@яндекс.рф"
+        "letsencryptEmail": "test@pektin.club"
     },
     "usePolicies": "ribston",
     "build": {
@@ -51,7 +52,7 @@
             "path": "/home/paul/Documents/pektin/pektin-server"
         },
         "api": {
-            "enabled": true,
+            "enabled": false,
             "path": "/home/paul/Documents/pektin/pektin-api"
         },
         "ui": {
@@ -78,8 +79,8 @@
         "tempZone": { "enabled": true, "provider": "pektin.zone", "routing": "local" },
         "traefikUi": false,
         "external": {
-            "domain": "яндекс.рф",
-            "subDomain": "pektin-де",
+            "domain": "pektin.club",
+            "subDomain": "pektin-proxy",
             "enabled": true,
             "services": { "gandi": true, "crt": true }
         }
