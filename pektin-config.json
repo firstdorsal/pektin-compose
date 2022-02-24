@@ -77,12 +77,25 @@
         "routing": "local",
         "tls": false,
         "tempZone": { "enabled": true, "provider": "pektin.zone", "routing": "local" },
-        "traefikUi": false,
+        "traefikUi": { "enabled": true, "domain": "pektin.club", "subDomain": "traefik" },
         "external": {
             "domain": "pektin.club",
             "subDomain": "pektin-proxy",
             "enabled": true,
-            "services": { "gandi": true, "crt": true }
+            "services": [
+                {
+                    "name": "gandi",
+                    "enabled": true,
+                    "domain": "api.gandi.net",
+                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE"]
+                },
+                {
+                    "name": "crt",
+                    "enabled": true,
+                    "domain": "crt.sh",
+                    "accessControlAllowMethods": ["OPTIONS", "GET"]
+                }
+            ]
         }
     }
 }
