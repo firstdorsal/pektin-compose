@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 SCRIPTS_IMAGE_NAME=pektin/scripts
 SCRIPTS_CONTAINER_NAME=pektin-scripts
 
@@ -32,7 +32,7 @@ sleep 1
 echo -en                                 "███████████████${NO_COLOR}"
 sleep 1
 echo ""
-sh reset.sh
+bash reset.sh
 echo -e "${RED}--------     RESET FINISHED      --------${NO_COLOR}"
 fi
 
@@ -60,11 +60,11 @@ docker rm ${SCRIPTS_CONTAINER_NAME} -v --force &> /dev/null
 docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --user $(id -u):$(id -g) --name ${SCRIPTS_CONTAINER_NAME} --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it ${SCRIPTS_IMAGE_NAME} node ./dist/js/install/scripts.js compose-install || exit 1
 
 # join swarm script
-sh swarm.sh &> /dev/null
+bash swarm.sh &> /dev/null
 rm swarm.sh &> /dev/null
 
 # run the start script
-sh start.sh
+bash start.sh
 
 # run pektin-first-start
 docker rm ${SCRIPTS_CONTAINER_NAME} -v --force &> /dev/null

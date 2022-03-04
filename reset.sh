@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "Deleting old artifacts..."
 docker swarm leave --force
 docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml down --remove-orphans

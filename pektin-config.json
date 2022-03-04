@@ -33,7 +33,17 @@
         },
         {
             "name": "gustav",
-            "ips": ["2a01:4f9:c01f:80::"]
+            "ips": ["2a01:4f9:c01f:80::"],
+            "setup": {
+                "system": "ubuntu",
+                "root": {
+                    "disableSystemdResolved": true,
+                    "installDocker": true
+                },
+                "cloneRepo": true,
+                "setup": true,
+                "start": true
+            }
         }
     ],
     "nameservers": [
