@@ -60,7 +60,7 @@ docker rm ${SCRIPTS_CONTAINER_NAME} -v --force &> /dev/null
 docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --user $(id -u):$(id -g) --name ${SCRIPTS_CONTAINER_NAME} --network rp --mount "type=bind,source=$PWD,dst=/pektin-compose/" -it ${SCRIPTS_IMAGE_NAME} node ./dist/js/install/scripts.js compose-install || exit 1
 
 # join swarm script
-bash swarm.sh &> /dev/null
+bash swarm.sh > /dev/null
 rm swarm.sh &> /dev/null
 
 # run the start script
