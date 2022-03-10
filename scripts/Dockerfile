@@ -1,4 +1,5 @@
-FROM pektin/deno-nodejs-alpine as build-stage
+FROM node:alpine as build-stage
+RUN apk add git bash
 WORKDIR /app/
 RUN git clone https://git.y.gy/pektin/pektin-js-client.git/ .
 RUN yarn && yarn build

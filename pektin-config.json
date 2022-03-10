@@ -62,7 +62,7 @@
             "path": "/home/paul/Documents/pektin/pektin-server"
         },
         "api": {
-            "enabled": false,
+            "enabled": true,
             "path": "/home/paul/Documents/pektin/pektin-api"
         },
         "ui": {
@@ -70,7 +70,7 @@
             "path": "/home/paul/Documents/pektin/pektin-ui"
         },
         "ribston": {
-            "enabled": false,
+            "enabled": true,
             "path": "/home/paul/Documents/pektin/ribston"
         },
         "recursor": {

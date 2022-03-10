@@ -44,7 +44,7 @@ then
     echo "Using the local pektin scripts docker image from $SCRIPT_PATH"
     docker build ${SCRIPT_PATH} -t ${SCRIPTS_IMAGE_NAME} #> /dev/null
 else
-    docker build --no-cache ./scripts/ -t ${SCRIPTS_IMAGE_NAME} #> /dev/null
+    docker build ./scripts/ -t ${SCRIPTS_IMAGE_NAME} #> /dev/null
 fi
 
 mkdir secrets
