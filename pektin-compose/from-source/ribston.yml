@@ -1,4 +1,6 @@
 version: "3.7"
 services:
-    ribston:
-        build: ${RIBSTON_BUILD_PATH}
+    server:
+        build:
+            context: ${RIBSTON_BUILD_PATH}
+            dockerfile: ${RIBSTON_DOCKERFILE}

@@ -1,4 +1,6 @@
 version: "3.7"
 services:
-    vault:
-        build: ${VAULT_BUILD_PATH}
+    server:
+        build:
+            context: ${VAULT_BUILD_PATH}
+            dockerfile: ${VAULT_DOCKERFILE}

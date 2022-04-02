@@ -1,4 +1,6 @@
 version: "3.7"
 services:
-    ui:
-        build: ${UI_BUILD_PATH}
+    server:
+        build:
+            context: ${UI_BUILD_PATH}
+            dockerfile: ${UI_DOCKERFILE}

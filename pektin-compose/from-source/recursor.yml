@@ -1,4 +1,6 @@
 version: "3.7"
 services:
-    recursor:
-        build: ${RECURSOR_BUILD_PATH}
+    server:
+        build:
+            context: ${RECURSOR_BUILD_PATH}
+            dockerfile: ${RECURSOR_DOCKERFILE}

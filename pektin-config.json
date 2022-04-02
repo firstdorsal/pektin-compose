@@ -48,8 +48,7 @@
     ],
     "nameservers": [
         { "subDomain": "ns1", "domain": "pektin.club", "node": "balduin", "main": true },
-        { "subDomain": "ns2", "domain": "pektin.club", "node": "gustav" },
-        { "subDomain": "ns1", "domain": "toll.club", "node": "balduin", "main": true }
+        { "subDomain": "ns2", "domain": "pektin.club", "node": "gustav" }
     ],
     "letsencrypt": {
         "enabled": true,
@@ -58,28 +57,34 @@
     "usePolicies": "ribston",
     "build": {
         "server": {
-            "enabled": false,
-            "path": "/home/paul/Documents/pektin/pektin-server"
+            "enabled": true,
+            "path": "/home/paul/Documents/pektin/pektin-server",
+            "dockerfile": "Dockerfile"
         },
         "api": {
             "enabled": true,
-            "path": "/home/paul/Documents/pektin/pektin-api"
+            "path": "/home/paul/Documents/pektin/pektin-api",
+            "dockerfile": "Dockerfile"
         },
         "ui": {
             "enabled": false,
-            "path": "/home/paul/Documents/pektin/pektin-ui"
+            "path": "/home/paul/Documents/pektin/pektin-ui",
+            "dockerfile": "Dockerfile"
         },
         "ribston": {
-            "enabled": true,
-            "path": "/home/paul/Documents/pektin/ribston"
+            "enabled": false,
+            "path": "/home/paul/Documents/pektin/pektin-ribston",
+            "dockerfile": "Dockerfile"
         },
         "recursor": {
             "enabled": false,
-            "path": ""
+            "path": "",
+            "dockerfile": "Dockerfile"
         },
         "vault": {
             "enabled": false,
-            "path": ""
+            "path": "",
+            "dockerfile": "Dockerfile"
         }
     },
     "reverseProxy": {
