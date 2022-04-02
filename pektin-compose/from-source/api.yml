@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-    server:
+    api:
         build:
             context: ${API_BUILD_PATH}
             dockerfile: ${API_DOCKERFILE}
