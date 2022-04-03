@@ -14,9 +14,9 @@
             "domain": "pektin.club",
             "subDomain": "ui",
             "build": {
-                "enabled": true,
+                "enabled": false,
                 "path": "/home/paul/Documents/pektin/pektin-ui",
-                "dockerfile": "dev.Dockerfile"
+                "dockerfile": "Dockerfile"
             }
         },
         "api": {
@@ -26,7 +26,7 @@
             "build": {
                 "enabled": false,
                 "path": "/home/paul/Documents/pektin/pektin-api",
-                "dockerfile": "Dockerfile"
+                "dockerfile": "dev.Dockerfile"
             }
         },
         "vault": {

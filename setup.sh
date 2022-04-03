@@ -48,7 +48,7 @@ else
 fi
 
 mkdir secrets
-echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PASSWORD='warnings'\nR_PEKTIN_API_PASSWORD='docker'\nUSE_POLICIES='foo'\n" > secrets/.env
+echo -e "R_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_PASSWORD='warnings'\nR_PEKTIN_API_PASSWORD='docker'\nUSE_POLICIES='compose'\nSERVER_LOGGING='you'\nAPI_LOGGING='naughty'\n" > secrets/.env
 
 
 
