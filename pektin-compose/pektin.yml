@@ -23,6 +23,7 @@ services:
             - V_PEKTIN_API_PASSWORD=${V_PEKTIN_API_PASSWORD}
             - REDIS_PASSWORD=${R_PEKTIN_API_PASSWORD}
             - USE_POLICIES=${USE_POLICIES}
+            - RUST_LOG=${API_LOGGING}
         networks:
             - vault
             - db
@@ -48,6 +49,7 @@ services:
         restart: always
         environment:
             - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - RUST_LOG=${SERVER_LOGGING}
         networks:
             - db
             - rp

@@ -1,28 +1,68 @@
 {
     "services": {
+        "server": {
+            "enabled": true,
+            "logging": "main,pektin_server",
+            "build": {
+                "enabled": false,
+                "path": "/home/paul/Documents/pektin/pektin-server",
+                "dockerfile": "Dockerfile"
+            }
+        },
         "ui": {
             "enabled": true,
             "domain": "pektin.club",
-            "subDomain": "ui"
+            "subDomain": "ui",
+            "build": {
+                "enabled": true,
+                "path": "/home/paul/Documents/pektin/pektin-ui",
+                "dockerfile": "dev.Dockerfile"
+            }
         },
         "api": {
             "domain": "pektin.club",
-            "subDomain": "api"
+            "subDomain": "api",
+            "logging": "main,pektin_api",
+            "build": {
+                "enabled": false,
+                "path": "/home/paul/Documents/pektin/pektin-api",
+                "dockerfile": "Dockerfile"
+            }
         },
         "vault": {
             "domain": "pektin.club",
-            "subDomain": "vault"
+            "subDomain": "vault",
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         },
         "recursor": {
             "enabled": true,
             "domain": "pektin.club",
-            "subDomain": "recursor"
+            "subDomain": "recursor",
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         },
         "ribston": {
-            "enabled": true
+            "enabled": true,
+            "build": {
+                "enabled": false,
+                "path": "/home/paul/Documents/pektin/pektin-ribston",
+                "dockerfile": "Dockerfile"
+            }
         },
         "opa": {
-            "enabled": false
+            "enabled": false,
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         }
     },
     "nodes": [
@@ -55,38 +95,6 @@
         "letsencryptEmail": "test@pektin.club"
     },
     "usePolicies": "ribston",
-    "build": {
-        "server": {
-            "enabled": true,
-            "path": "/home/paul/Documents/pektin/pektin-server",
-            "dockerfile": "Dockerfile"
-        },
-        "api": {
-            "enabled": true,
-            "path": "/home/paul/Documents/pektin/pektin-api",
-            "dockerfile": "Dockerfile"
-        },
-        "ui": {
-            "enabled": false,
-            "path": "/home/paul/Documents/pektin/pektin-ui",
-            "dockerfile": "Dockerfile"
-        },
-        "ribston": {
-            "enabled": false,
-            "path": "/home/paul/Documents/pektin/pektin-ribston",
-            "dockerfile": "Dockerfile"
-        },
-        "recursor": {
-            "enabled": false,
-            "path": "",
-            "dockerfile": "Dockerfile"
-        },
-        "vault": {
-            "enabled": false,
-            "path": "",
-            "dockerfile": "Dockerfile"
-        }
-    },
     "reverseProxy": {
         "createTraefik": true,
         "routing": "local",
