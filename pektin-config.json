@@ -24,7 +24,7 @@
             "subDomain": "api",
             "logging": "main,pektin_api",
             "build": {
-                "enabled": false,
+                "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-api",
                 "dockerfile": "dev.Dockerfile"
             }
