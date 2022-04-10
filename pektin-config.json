@@ -23,7 +23,7 @@
             "domain": "pektin.club",
             "subDomain": "api",
             "logging": "main,pektin_api",
-            "perimeterAuth": true,
+            "perimeterAuth": false,
             "build": {
                 "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-api",
@@ -33,7 +33,7 @@
         "vault": {
             "domain": "pektin.club",
             "subDomain": "vault",
-            "perimeterAuth": true,
+            "perimeterAuth": false,
             "build": {
                 "enabled": false,
                 "path": "",

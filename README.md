@@ -21,10 +21,6 @@ in devmode this deletes everything and uses the local scripts dockerfile if pres
 
 # TODO create distinct redis passwords for different nodes
 
-# TODO: GENERATE FULL VAULT API URL WITH INSTALL INTO .env
-
-# TODO Redis add capabilities to repl account
-
 include the password for the replicant in the redis.conf like this:
 
 ```

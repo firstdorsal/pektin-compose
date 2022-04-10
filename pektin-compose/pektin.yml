@@ -10,8 +10,8 @@ services:
             - vault:/vault/file/
             - ../config/vault/:/vault/config/
         command: ["server"]
-        #environment:
-        #  - VAULT_API_ADDR=
+        environment:
+            - VAULT_API_ADDR=${VAULT_API_ADDR}
         networks:
             - vault
             - rp
