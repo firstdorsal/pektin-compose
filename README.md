@@ -59,3 +59,5 @@ pektin-ui.abcde.pektin.zone
 domains will be replaced as they instead could be easily enumerated in crt.sh by searching for pektin.zone
 
 will be deleted after 7 days
+
+яндекс.рф

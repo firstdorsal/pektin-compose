@@ -4,9 +4,9 @@
             "enabled": true,
             "logging": "main,pektin_server",
             "build": {
-                "enabled": false,
+                "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-server",
-                "dockerfile": "Dockerfile"
+                "dockerfile": "dev.Dockerfile"
             }
         },
         "ui": {
