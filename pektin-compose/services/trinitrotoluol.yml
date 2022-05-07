@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+    trinitrotoluol:
+        image: pektin/trinitrotoluol
+        container_name: pektin-trinitrotoluol
+        restart: always
+        networks:
+            - rp
+
+networks:
+    rp:
+        name: rp

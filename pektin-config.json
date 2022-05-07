@@ -40,10 +40,10 @@
                 "dockerfile": "Dockerfile"
             }
         },
-        "recursor": {
+        "trinitrotoluol": {
             "enabled": true,
             "domain": "pektin.club",
-            "subDomain": "recursor",
+            "subDomain": "tnt",
             "build": {
                 "enabled": false,
                 "path": "",
@@ -89,8 +89,17 @@
         }
     ],
     "nameservers": [
-        { "subDomain": "ns1", "domain": "pektin.club", "node": "balduin", "main": true },
-        { "subDomain": "ns2", "domain": "pektin.club", "node": "gustav" }
+        {
+            "subDomain": "ns1",
+            "domain": "pektin.club",
+            "node": "balduin",
+            "main": true
+        },
+        {
+            "subDomain": "ns2",
+            "domain": "pektin.club",
+            "node": "gustav"
+        }
     ],
     "letsencrypt": {
         "enabled": true,
@@ -101,8 +110,16 @@
         "createTraefik": true,
         "routing": "local",
         "tls": false,
-        "tempZone": { "enabled": true, "provider": "pektin.zone", "routing": "local" },
-        "traefikUi": { "enabled": true, "domain": "pektin.club", "subDomain": "traefik" },
+        "tempZone": {
+            "enabled": true,
+            "provider": "pektin.zone",
+            "routing": "local"
+        },
+        "traefikUi": {
+            "enabled": true,
+            "domain": "pektin.club",
+            "subDomain": "traefik"
+        },
         "external": {
             "domain": "pektin.club",
             "subDomain": "pektin-proxy",
