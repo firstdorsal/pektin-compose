@@ -40,7 +40,7 @@
                 "dockerfile": "Dockerfile"
             }
         },
-        "trinitrotoluol": {
+        "tnt": {
             "enabled": true,
             "domain": "pektin.club",
             "subDomain": "tnt",
