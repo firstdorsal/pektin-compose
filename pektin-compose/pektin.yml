@@ -22,7 +22,7 @@ services:
         environment:
             - V_PEKTIN_API_PASSWORD=${V_PEKTIN_API_PASSWORD}
             - V_PEKTIN_API_USER_NAME=${V_PEKTIN_API_USER_NAME}
-            - DB_PASSWORD=${R_PEKTIN_API_PASSWORD}
+            - DB_PASSWORD=${DB_PEKTIN_API_PASSWORD}
             - USE_POLICIES=${USE_POLICIES}
             - RUST_LOG=${API_LOGGING}
         networks:
@@ -49,7 +49,7 @@ services:
         container_name: pektin-server
         restart: always
         environment:
-            - DB_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - DB_PASSWORD=${DB_PEKTIN_SERVER_PASSWORD}
             - RUST_LOG=${SERVER_LOGGING}
         networks:
             - db

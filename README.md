@@ -26,7 +26,7 @@ include the password for the replicant in the db.conf like this:
 ```
 aclfile /users.acl
 replicaof pektin-db-direktor 6379
-masteruser r-pektin-gewerkschaft
+masteruser db-pektin-gewerkschaft
 masterauth bZgXq615L2kHIvOY9ESS8TDouCZM0i8E6rEvVGFcE_djeYKx_1l72HAnTjW_GpwvXw80E0hnM-SLq7Dxsw__5SE1EJXWqz7Sgv0CLVSjF3H8Dy7Ffg64GKb-jp_Bes0-pnqpTA
 protected-mode yes
 ```
