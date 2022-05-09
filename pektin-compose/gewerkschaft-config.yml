@@ -1,17 +1,17 @@
 version: "3.7"
 services:
-    redis:
-        container_name: pektin-redis-direktor
+    db:
+        container_name: pektin-db-direktor
         volumes:
-            - ../config/redis/direktor/redis.conf:/redis.conf:ro
+            - ../config/db/direktor/db.conf:/db.conf:ro
         networks:
             - pektin-gewerkschaft
     api:
         environment:
-            - REDIS_HOSTNAME=pektin-redis-direktor
+            - DB_HOSTNAME=pektin-db-direktor
     server:
         environment:
-            - REDIS_HOSTNAME=pektin-redis-direktor
+            - DB_HOSTNAME=pektin-db-direktor
 
 networks:
     pektin-gewerkschaft:

@@ -1,25 +1,25 @@
 version: "3.7"
 services:
-    redis:
-        image: redis:6.2.6-alpine
+    db:
+        image: db:6.2.6-alpine
         user: root
-        container_name: pektin-redis-arbeiter
+        container_name: pektin-db-arbeiter
         restart: always
         volumes:
             - db:/data
-            - ../../secrets/redis/redis.conf:/redis.conf:ro
-            - ../../secrets/redis/users.acl:/users.acl:ro
+            - ../../secrets/db/db.conf:/db.conf:ro
+            - ../../secrets/db/users.acl:/users.acl:ro
         networks:
             - db
             - pektin-gewerkschaft
-        command: "redis-server /redis.conf"
+        command: "db-server /db.conf"
     server:
         image: pektin/server
         container_name: pektin-server
         restart: always
         environment:
-            - REDIS_HOSTNAME=pektin-redis-arbeiter
-            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - DB_HOSTNAME=pektin-db-arbeiter
+            - DB_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
         networks:
             - db
             - rp
@@ -27,7 +27,7 @@ services:
             - 53:53/udp
             - 53:53/tcp
         depends_on:
-            - redis
+            - db
 
 networks:
     db:

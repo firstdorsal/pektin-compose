@@ -1,5 +1,5 @@
 *.env
-config/redis/users.acl
+config/db/users.acl
 secrets
 start.sh
 stop.sh

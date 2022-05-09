@@ -22,7 +22,7 @@ services:
         environment:
             - V_PEKTIN_API_PASSWORD=${V_PEKTIN_API_PASSWORD}
             - V_PEKTIN_API_USER_NAME=${V_PEKTIN_API_USER_NAME}
-            - REDIS_PASSWORD=${R_PEKTIN_API_PASSWORD}
+            - DB_PASSWORD=${R_PEKTIN_API_PASSWORD}
             - USE_POLICIES=${USE_POLICIES}
             - RUST_LOG=${API_LOGGING}
         networks:
@@ -30,26 +30,26 @@ services:
             - db
             - rp
         depends_on:
-            - redis
+            - db
             - vault
-    redis:
-        image: redis:6.2.6-alpine
+    db:
+        image: eqalpha/keydb:alpine_x86_64_v6.2.2
         user: root
-        container_name: pektin-redis
+        container_name: pektin-db
         restart: always
         volumes:
             - db:/data
-            - ../config/redis/redis.conf:/redis.conf:ro
-            - ../secrets/redis/users.acl:/users.acl:ro
+            - ../config/db/db.conf:/db.conf:ro
+            - ../secrets/db/users.acl:/users.acl:ro
         networks:
             - db
-        command: ["redis-server", "/redis.conf"]
+        command: ["keydb-server", "/db.conf"]
     server:
         image: pektin/server
         container_name: pektin-server
         restart: always
         environment:
-            - REDIS_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
+            - DB_PASSWORD=${R_PEKTIN_SERVER_PASSWORD}
             - RUST_LOG=${SERVER_LOGGING}
         networks:
             - db
@@ -58,7 +58,7 @@ services:
             - 53:53/udp
             - 53:53/tcp
         depends_on:
-            - redis
+            - db
 
 networks:
     vault:
