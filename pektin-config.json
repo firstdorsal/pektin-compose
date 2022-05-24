@@ -45,8 +45,8 @@
             "domain": "pektin.club",
             "subDomain": "tnt",
             "build": {
-                "enabled": false,
-                "path": "",
+                "enabled": true,
+                "path": "/home/paul/Documents/pektin/pektin-tnt",
                 "dockerfile": "Dockerfile"
             }
         },
