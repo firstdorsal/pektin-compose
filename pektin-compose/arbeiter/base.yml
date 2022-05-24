@@ -12,7 +12,7 @@ services:
         networks:
             - db
             - pektin-gewerkschaft
-        command: "db-server /db.conf"
+        command: ["keydb-server", "/db.conf"]
     server:
         image: pektin/server
         container_name: pektin-server
