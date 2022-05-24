@@ -1,7 +1,7 @@
 version: "3.7"
 services:
     db:
-        image: db:6.2.6-alpine
+        image: eqalpha/keydb:alpine_x86_64_v6.2.2
         user: root
         container_name: pektin-db-arbeiter
         restart: always
