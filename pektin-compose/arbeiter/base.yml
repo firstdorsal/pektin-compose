@@ -37,9 +37,6 @@ networks:
         name: pektin-gewerkschaft
         external: true
         driver: overlay
-        attachable: true
-        driver_opts:
-            encrypted:
 
 volumes:
     db:
