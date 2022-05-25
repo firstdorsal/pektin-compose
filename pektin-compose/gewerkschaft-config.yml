@@ -18,3 +18,4 @@ networks:
         name: pektin-gewerkschaft
         driver: overlay
         attachable: true
+        external: true
