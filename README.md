@@ -1,7 +1,7 @@
 # required
 
 -   docker
--   docker-compose
+-   docker-compose plugin
 -   rm
 -   git
 -   sh

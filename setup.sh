@@ -53,7 +53,7 @@ echo -e "DB_PEKTIN_SERVER_PASSWORD='stop'\nCSP_CONNECT_SRC='the'\nV_PEKTIN_API_P
 
 
 # start vault
-docker-compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
+docker compose --env-file secrets/.env -f pektin-compose/pektin.yml up -d vault
 
 # run pektin-install
 docker rm ${SCRIPTS_CONTAINER_NAME} -v --force &> /dev/null
@@ -62,7 +62,7 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --user $(id
 # join swarm script
 bash swarm.sh > /dev/null
 rm swarm.sh &> /dev/null
-docker network create --opt encrypted --driver overlay --attachable pektin-gewerkschaft
+#docker network create --opt encrypted --driver overlay --attachable pektin-gewerkschaft
 # run the start script
 bash start.sh
 
