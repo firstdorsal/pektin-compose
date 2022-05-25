@@ -62,7 +62,7 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --user $(id
 # join swarm script
 bash swarm.sh > /dev/null
 rm swarm.sh &> /dev/null
-docker network create --driver overlay --attachable pektin-gewerkschaft
+docker network create --opt encrypted --driver overlay --attachable pektin-gewerkschaft
 # run the start script
 bash start.sh
 
