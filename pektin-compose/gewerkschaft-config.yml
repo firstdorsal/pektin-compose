@@ -19,3 +19,5 @@ networks:
         driver: overlay
         attachable: true
         external: true
+        driver_opts:
+            encrypted:
