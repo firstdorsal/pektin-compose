@@ -2,7 +2,7 @@
     "services": {
         "server": {
             "enabled": true,
-            "logging": "main,pektin_server",
+            "logging": "main,pektin_server,pektin_common",
             "build": {
                 "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-server",
@@ -22,7 +22,7 @@
         "api": {
             "domain": "pektin.club",
             "subDomain": "api",
-            "logging": "main,pektin_api",
+            "logging": "main,pektin_api,pektin_common",
             "perimeterAuth": false,
             "build": {
                 "enabled": true,
