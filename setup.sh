@@ -63,8 +63,8 @@ docker run --env UID=$(id -u) --env GID=$(id -g) --env FORCE_COLOR=3 --user $(id
 bash swarm.sh > /dev/null
 rm swarm.sh &> /dev/null
 #docker network create --opt encrypted --driver overlay --attachable pektin-gewerkschaft
-# run the start script
-bash start.sh
+# run the update/start script
+bash update.sh
 
 # run pektin-first-start
 docker rm ${SCRIPTS_CONTAINER_NAME} -v --force &> /dev/null
