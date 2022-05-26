@@ -81,7 +81,8 @@
         {
             "main": true,
             "name": "balduin",
-            "ips": ["2a01:4f9:c01f:80::"]
+            "ips": ["2a01:4f9:c01f:80::"],
+            "legacyIps": ["1.1.1.1"]
         },
         {
             "name": "gustav",
