@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    jaeger:
+        container_name: pektin-jaeger
+        restart: always
+        image: jaegertracing/all-in-one
+        networks:
+            - jaeger
+            - rp
+    api:
+        networks:
+            - jaeger
+        depends_on:
+            - jaeger
+        environment:
+            - "JAEGER_URI=pektin-jaeger:6831"
+networks:
+    jaeger:
+    rp:
+        name: rp

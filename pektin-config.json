@@ -65,6 +65,16 @@
                 "path": "",
                 "dockerfile": "Dockerfile"
             }
+        },
+        "jaeger": {
+            "enabled": true,
+            "domain": "pektin.club",
+            "subDomain": "jaeger",
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         }
     },
     "nodes": [
