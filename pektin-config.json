@@ -68,8 +68,6 @@
         },
         "jaeger": {
             "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "jaeger",
             "build": {
                 "enabled": false,
                 "path": "",
