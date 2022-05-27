@@ -73,6 +73,26 @@
                 "path": "",
                 "dockerfile": "Dockerfile"
             }
+        },
+        "prometheus": {
+            "enabled": true,
+            "domain": "pektin.club",
+            "subDomain": "prometheus",
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
+        },
+        "grafana": {
+            "enabled": true,
+            "domain": "pektin.club",
+            "subDomain": "grafana",
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         }
     },
     "nodes": [

@@ -6,9 +6,13 @@ services:
         image: prom/prometheus:v2.35.0
         networks:
             - prometheus
+        volumes:
+            - prometheus:/prometheus
     api:
         networks:
             - prometheus
 
 networks:
+    prometheus:
+volumes:
     prometheus:

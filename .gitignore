@@ -10,3 +10,4 @@ arbeiter/*
 *.secret.json
 your-infos.md
 ansible
+overrides.yml

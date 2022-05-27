@@ -3,15 +3,13 @@ services:
     jaeger:
         container_name: pektin-jaeger
         restart: always
-        image: jaegertracing/all-in-one
+        image: jaegertracing/all-in-one:1.34
         networks:
             - jaeger
         ports:
-            - 16686:16686/tcp
+            - 127.0.0.1:16686:16686/tcp
     api:
         networks:
-            - jaeger
-        depends_on:
             - jaeger
         environment:
             - "JAEGER_URI=pektin-jaeger:6831"
