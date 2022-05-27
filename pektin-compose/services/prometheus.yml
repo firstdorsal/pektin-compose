@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+    prometheus:
+        container_name: pektin-prometheus
+        restart: always
+        image: prom/prometheus:v2.35.0
+        networks:
+            - prometheus
+    api:
+        networks:
+            - prometheus
+
+networks:
+    prometheus:
