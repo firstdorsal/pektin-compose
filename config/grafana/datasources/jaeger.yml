@@ -1,0 +1,5 @@
+apiVersion: 1
+datasources:
+    - name: pektin-jaeger
+      type: jaeger
+      url: http://pektin-jaeger:16686

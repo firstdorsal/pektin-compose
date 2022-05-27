@@ -5,11 +5,16 @@ services:
         restart: always
         image: grafana/grafana-oss:8.5.3
         networks:
-            - prometheus
             - rp
         environment:
-            GF_SERVER_HTTP_PORT: "80"
+            GF_SERVER_HTTP_PORT: 80
+        volumes:
+            - ../config/grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ../config/grafana/datasources:/etc/grafana/provisioning/datasources/
+            - grafana:/var/lib/grafana
+
 networks:
-    prometheus:
     rp:
         name: rp
+volumes:
+    grafana:

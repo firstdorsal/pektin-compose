@@ -4,11 +4,19 @@ services:
         container_name: pektin-prometheus
         restart: always
         image: prom/prometheus:v2.35.0
+
         networks:
             - prometheus
         volumes:
             - prometheus:/prometheus
+            - ../config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     api:
+        networks:
+            - prometheus
+    rp:
+        networks:
+            - prometheus
+    grafana:
         networks:
             - prometheus
 
