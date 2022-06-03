@@ -76,8 +76,6 @@
         },
         "prometheus": {
             "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "prometheus",
             "build": {
                 "enabled": false,
                 "path": "",
