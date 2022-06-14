@@ -3,6 +3,10 @@
         {
             "fileMatch": ["pektin-config.json"],
             "url": "https://git.y.gy/pektin/pektin-config/-/raw/main/pektin-config.schema.json"
+        },
+        {
+            "fileMatch": ["*.pc3.json"],
+            "url": "https://git.y.gy/pektin/pektin-config/-/raw/main/pc3.schema.json"
         }
     ],
     "window.title": "🐳 ${rootName}"

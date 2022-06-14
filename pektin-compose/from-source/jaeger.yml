@@ -1,0 +1,6 @@
+version: "3.7"
+services:
+    jaeger:
+        build:
+            context: ${JAEGER_BUILD_PATH}
+            dockerfile: ${JAEGER_DOCKERFILE}

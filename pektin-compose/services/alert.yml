@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+    alert:
+        container_name: pektin-alert
+        restart: always
+        image: prom/alertmanager:v0.24.0
+        networks:
+            - prometheus
+        volumes:
+            - ../config/prometheus/alert/alertmanager.yml:/alertmanager.yml
+        command: --config.file=alertmanager.yml
+
+networks:
+    prometheus:

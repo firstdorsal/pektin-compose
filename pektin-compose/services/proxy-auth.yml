@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+    proxy-auth:
+        container_name: pektin-proxy-auth
+        restart: always
+        image: pektin/proxy-auth
+        environment:
+            - PROXY_BASIC_AUTH_HASHED=${PROXY_BASIC_AUTH_HASHED}
+        networks:
+            - rp
+networks:
+    rp:

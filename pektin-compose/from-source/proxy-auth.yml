@@ -1,0 +1,6 @@
+version: "3.7"
+services:
+    proxy-auth:
+        build:
+            context: ${PROXY_AUTH_BUILD_PATH}
+            dockerfile: ${PROXY_AUTH_DOCKERFILE}

@@ -1,0 +1,6 @@
+version: "3.7"
+services:
+    grafana:
+        build:
+            context: ${GRAFANA_BUILD_PATH}
+            dockerfile: ${GRAFANA_DOCKERFILE}

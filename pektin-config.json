@@ -91,6 +91,14 @@
                 "path": "",
                 "dockerfile": "Dockerfile"
             }
+        },
+        "alert": {
+            "enabled": true,
+            "build": {
+                "enabled": false,
+                "path": "",
+                "dockerfile": "Dockerfile"
+            }
         }
     },
     "nodes": [
@@ -151,6 +159,11 @@
             "domain": "pektin.club",
             "subDomain": "pektin-proxy",
             "enabled": true,
+            "build": {
+                "enabled": true,
+                "path": "/home/paul/Documents/pektin/proxy-auth/",
+                "dockerfile": "Dockerfile"
+            },
             "services": [
                 {
                     "name": "gandi",
