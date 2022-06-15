@@ -169,7 +169,7 @@
                     "name": "gandi",
                     "enabled": true,
                     "domain": "api.gandi.net",
-                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE"]
+                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE", "PUT"]
                 },
                 {
                     "name": "crt",
