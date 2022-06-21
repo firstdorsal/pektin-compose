@@ -4,17 +4,9 @@ services:
         container_name: pektin-db-direktor
         volumes:
             - ../config/db/direktor/db.conf:/db.conf:ro
-        networks:
-            - pektin-gewerkschaft
     api:
         environment:
             - DB_HOSTNAME=pektin-db-direktor
     server:
         environment:
             - DB_HOSTNAME=pektin-db-direktor
-
-networks:
-    pektin-gewerkschaft:
-        name: pektin-gewerkschaft
-        driver: overlay
-        attachable: true

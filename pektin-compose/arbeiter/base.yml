@@ -13,7 +13,6 @@ services:
             - ../secrets/db/wg0.conf:/etc/wireguard/wg0.conf
         networks:
             - db
-            - pektin-gewerkschaft
         command: ["keydb-server", "/db.conf"]
         ports:
             - 51820:51820/udp
@@ -37,10 +36,6 @@ networks:
     db:
     rp:
         name: rp
-    pektin-gewerkschaft:
-        name: pektin-gewerkschaft
-        external: true
-        driver: overlay
 
 volumes:
     db:
