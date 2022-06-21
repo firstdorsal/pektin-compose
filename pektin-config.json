@@ -169,13 +169,22 @@
                     "name": "gandi",
                     "enabled": true,
                     "domain": "api.gandi.net",
-                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE", "PUT"]
+                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE", "PUT"],
+                    "accessControlAllowHeaders": ["Content-Type", "Authorization"]
                 },
                 {
                     "name": "crt",
                     "enabled": true,
                     "domain": "crt.sh",
-                    "accessControlAllowMethods": ["OPTIONS", "GET"]
+                    "accessControlAllowMethods": ["OPTIONS", "GET"],
+                    "accessControlAllowHeaders": []
+                },
+                {
+                    "name": "mx.y.gy",
+                    "enabled": true,
+                    "domain": "mx.y.gy",
+                    "accessControlAllowMethods": ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
+                    "accessControlAllowHeaders": ["Content-Type", "X-Api-Key"]
                 }
             ]
         }
