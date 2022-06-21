@@ -35,20 +35,15 @@ services:
             - vault
     db:
         image: pektin/db
-        user: root
         container_name: pektin-db
         restart: always
         cap_add:
             - NET_ADMIN
-            - SYS_MODULE
-        sysctls:
-            - net.ipv6.conf.all.disable_ipv6=0
-            - net.ipv4.conf.all.src_valid_mark=1
         volumes:
             - db:/data
             - ../config/db/db.conf:/db.conf:ro
             - ../secrets/db/users.acl:/users.acl:ro
-            - ../secrets/db/wg0.conf:/wg0.conf
+            - ../secrets/db/wg0.conf:/etc/wireguard/wg0.conf
         networks:
             - db
         command: ["keydb-server", "/db.conf"]
