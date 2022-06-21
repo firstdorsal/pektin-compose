@@ -1,5 +1,5 @@
 FROM node:16.15.0-alpine3.15 as build-stage
-RUN apk add git bash
+RUN apk add --no-cache --update git bash wireguard-tools
 WORKDIR /app/
 RUN git clone https://git.y.gy/pektin/pektin-js-client.git/ .
 RUN yarn && yarn build

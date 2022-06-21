@@ -1,18 +1,25 @@
 version: "3.7"
 services:
     db:
-        image: eqalpha/keydb:alpine_x86_64_v6.2.2
+        image: pektin/db
         user: root
         container_name: pektin-db-arbeiter
         restart: always
+        cap_add:
+            - NET_ADMIN
+        sysctls:
+            - net.ipv6.conf.all.disable_ipv6=0
         volumes:
             - db:/data
             - ../../secrets/db/db.conf:/db.conf:ro
             - ../../secrets/db/users.acl:/users.acl:ro
+            - ../secrets/db/wg0.conf:/wg0.conf
         networks:
             - db
             - pektin-gewerkschaft
         command: ["keydb-server", "/db.conf"]
+        ports:
+            - 51820:51820/udp
     server:
         image: pektin/server
         container_name: pektin-server
