@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+    zertificat:
+        image: pektin/zertificat
+        container_name: pektin-zertificat
+        restart: always
+        networks:
+            - pektin-vault
+        environment:
+            MODE: vault
+            URL: http://pektin-vault
+            USERNAME: x #${ZERTIFICAT_VAULT_USERNAME}
+            PASSWORD: x #${ZERTIFICAT_VAULT_PASSWORD}
+            PEKTIN_AUTH: ${ZERTIFICAT_PEKTIN_ACME_AUTH_INTERNAL}
+
+networks:
+    pektin-vault:
+        name: pektin-vault

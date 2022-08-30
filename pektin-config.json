@@ -40,6 +40,14 @@
                 "dockerfile": "Dockerfile"
             }
         },
+        "zertificat": {
+            "enabled": true,
+            "build": {
+                "enabled": true,
+                "path": "/home/paul/Documents/pektin/pektin-zertificat",
+                "dockerfile": "Dockerfile"
+            }
+        },
         "tnt": {
             "enabled": true,
             "domain": "pektin.club",

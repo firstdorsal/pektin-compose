@@ -1,0 +1,6 @@
+version: "3.7"
+services:
+    alert:
+        build:
+            context: ${ALERT_BUILD_PATH}
+            dockerfile: ${ALERT_DOCKERFILE}
