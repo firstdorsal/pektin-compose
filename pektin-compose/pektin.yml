@@ -29,7 +29,7 @@ services:
             - pektin-vault
             - db
             - rp
-            - api
+            - pektin-api
         depends_on:
             - db
             - vault
@@ -71,7 +71,8 @@ networks:
     db:
     rp:
         name: rp
-    api:
+    pektin-api:
+        name: pektin-api
 
 volumes:
     vault:

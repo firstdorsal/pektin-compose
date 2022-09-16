@@ -14,7 +14,7 @@
             "domain": "pektin.club",
             "subDomain": "ui",
             "build": {
-                "enabled": false,
+                "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-ui",
                 "dockerfile": "Dockerfile"
             }
@@ -40,13 +40,59 @@
                 "dockerfile": "Dockerfile"
             }
         },
+        "verkehr": {
+            "enabled": true,
+            "build": {
+                "enabled": true,
+                "path": "/home/paul/Documents/pektin/pektin-verkehr",
+                "dockerfile": "Dockerfile"
+            },
+            "routing": "local",
+            "tls": true,
+            "tempZone": {
+                "enabled": false,
+                "provider": "pektin.zone",
+                "routing": "local"
+            },
+            "external": {
+                "domain": "pektin.club",
+                "subDomain": "pektin-proxy",
+                "enabled": true,
+                "services": [
+                    {
+                        "name": "gandi",
+                        "enabled": true,
+                        "domain": "api.gandi.net",
+                        "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE", "PUT"],
+                        "accessControlAllowHeaders": ["Content-Type", "Authorization"]
+                    },
+                    {
+                        "name": "crt",
+                        "enabled": true,
+                        "domain": "crt.sh",
+                        "accessControlAllowMethods": ["OPTIONS", "GET"],
+                        "accessControlAllowHeaders": []
+                    },
+                    {
+                        "name": "mx.y.gy",
+                        "enabled": true,
+                        "domain": "mx.y.gy",
+                        "accessControlAllowMethods": ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
+                        "accessControlAllowHeaders": ["Content-Type", "X-Api-Key"]
+                    }
+                ]
+            }
+        },
         "zertificat": {
             "enabled": true,
             "build": {
                 "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-zertificat",
-                "dockerfile": "Dockerfile"
-            }
+                "dockerfile": "dev.Dockerfile"
+            },
+            "acmeEmail": "letsencrypt@y.gy",
+            "acmeEndpoint": "https://acme-staging-v02.api.letsencrypt.org/directory",
+            "usePebble": true
         },
         "tnt": {
             "enabled": true,
@@ -101,7 +147,7 @@
             }
         },
         "alert": {
-            "enabled": true,
+            "enabled": false,
             "build": {
                 "enabled": false,
                 "path": "",
@@ -144,57 +190,6 @@
             "node": "gustav"
         }
     ],
-    "letsencrypt": {
-        "enabled": true,
-        "letsencryptEmail": "test@pektin.club"
-    },
-    "usePolicies": "ribston",
-    "reverseProxy": {
-        "createTraefik": true,
-        "routing": "local",
-        "tls": false,
-        "tempZone": {
-            "enabled": true,
-            "provider": "pektin.zone",
-            "routing": "local"
-        },
-        "traefikUi": {
-            "enabled": true,
-            "domain": "pektin.club",
-            "subDomain": "traefik"
-        },
-        "external": {
-            "domain": "pektin.club",
-            "subDomain": "pektin-proxy",
-            "enabled": true,
-            "build": {
-                "enabled": true,
-                "path": "/home/paul/Documents/pektin/proxy-auth/",
-                "dockerfile": "Dockerfile"
-            },
-            "services": [
-                {
-                    "name": "gandi",
-                    "enabled": true,
-                    "domain": "api.gandi.net",
-                    "accessControlAllowMethods": ["OPTIONS", "POST", "GET", "DELETE", "PUT"],
-                    "accessControlAllowHeaders": ["Content-Type", "Authorization"]
-                },
-                {
-                    "name": "crt",
-                    "enabled": true,
-                    "domain": "crt.sh",
-                    "accessControlAllowMethods": ["OPTIONS", "GET"],
-                    "accessControlAllowHeaders": []
-                },
-                {
-                    "name": "mx.y.gy",
-                    "enabled": true,
-                    "domain": "mx.y.gy",
-                    "accessControlAllowMethods": ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
-                    "accessControlAllowHeaders": ["Content-Type", "X-Api-Key"]
-                }
-            ]
-        }
-    }
+
+    "usePolicies": "ribston"
 }

@@ -6,13 +6,16 @@ services:
         restart: always
         networks:
             - pektin-vault
+            - pektin-api
         environment:
             MODE: vault
             URL: http://pektin-vault
-            USERNAME: x #${ZERTIFICAT_VAULT_USERNAME}
-            PASSWORD: x #${ZERTIFICAT_VAULT_PASSWORD}
+            USERNAME: ${ZERTIFICAT_MANAGER_VAULT_USERNAME}
+            PASSWORD: ${ZERTIFICAT_MANAGER_VAULT_PASSWORD}
             PEKTIN_AUTH: ${ZERTIFICAT_PEKTIN_ACME_AUTH_INTERNAL}
 
 networks:
     pektin-vault:
         name: pektin-vault
+    pektin-api:
+        name: pektin-api

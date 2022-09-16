@@ -1,0 +1,26 @@
+version: "3"
+services:
+    pebble:
+        restart: always
+        image: letsencrypt/pebble
+        command: pebble -dnsserver=pektin-server
+        container_name: pektin-pebble
+        networks:
+            - pektin-pebble
+        ports:
+            - 15000:15000
+        environment:
+            PEBBLE_VA_ALWAYS_VALID: 1 # skip dns challenge validation
+    zertificat:
+        networks:
+            - pektin-pebble
+        build:
+            context: ${ZERTIFICAT_BUILD_PATH}
+            dockerfile: dev-pebble.Dockerfile
+    server:
+        networks:
+            - pektin-pebble
+
+networks:
+    pektin-pebble:
+        name: pektin-pebble

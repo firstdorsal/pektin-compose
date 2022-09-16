@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+    rp:
+        container_name: rp
+        image: pektin/verkehr
+        restart: always
+        ports:
+            - 80:80/tcp
+            - 443:443/udp
+            - 443:443/tcp
+            - 853:853/tcp
+            #- 853:853/udp as soon as rustls supports dtls
+        networks:
+            - rp
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ../secrets/verkehr/verkehr.yml:/config.yml
+            - ../secrets/verkehr/dynamic/:/verkehr/dynamic/
+        environment:
+            VAULT_URL: http://pektin-vault
+            ZERTIFICAT_CONSUMER_VAULT_USERNAME: ${ZERTIFICAT_CONSUMER_VAULT_USERNAME}
+            ZERTIFICAT_CONSUMER_VAULT_PASSWORD: ${ZERTIFICAT_CONSUMER_VAULT_PASSWORD}
+
+networks:
+    rp:
+        name: rp
