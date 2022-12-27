@@ -19,3 +19,6 @@ echo \
 sudo apt-get update -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 
+echo '{ "ipv6": true, "fixed-cidr-v6": "fd00::/80", "experimental": true, "ip6tables": true }' > /etc/docker/daemon.json
+
+systemctl restart docker
