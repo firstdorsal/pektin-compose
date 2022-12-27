@@ -14,8 +14,6 @@ services:
         networks:
             - db
         command: ["keydb-server", "/db.conf"]
-        ports:
-            - 51820:51820/udp
     server:
         image: pektin/server
         container_name: pektin-server
@@ -34,8 +32,21 @@ services:
 
 networks:
     db:
+        name: pektin-db
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:a::/48
     rp:
         name: rp
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:b::/48
 
 volumes:
     db:

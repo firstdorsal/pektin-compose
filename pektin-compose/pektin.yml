@@ -68,11 +68,36 @@ services:
 networks:
     pektin-vault:
         name: pektin-vault
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:a::/48
     db:
+        name: pektin-db
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:b::/48
     rp:
         name: rp
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:c::/48
     pektin-api:
         name: pektin-api
+        driver: bridge
+        enable_ipv6: true
+        ipam:
+            driver: default
+            config:
+                - subnet: fd00:a:d::/48
 
 volumes:
     vault:
