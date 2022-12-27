@@ -10,7 +10,7 @@ services:
             - db:/data
             - ../../secrets/db/db.conf:/db.conf:ro
             - ../../secrets/db/users.acl:/users.acl:ro
-            - ../secrets/db/wg0.conf:/etc/wireguard/wg0.conf
+            - ../../secrets/db/wg0.conf:/etc/wireguard/wg0.conf
         networks:
             - db
         command: ["keydb-server", "/db.conf"]

@@ -6,7 +6,7 @@
             "build": {
                 "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-server",
-                "dockerfile": "dev.Dockerfile"
+                "dockerfile": "Dockerfile"
             }
         },
         "ui": {
@@ -27,7 +27,7 @@
             "build": {
                 "enabled": true,
                 "path": "/home/paul/Documents/pektin/pektin-api",
-                "dockerfile": "dev.Dockerfile"
+                "dockerfile": "Dockerfile"
             }
         },
         "vault": {
