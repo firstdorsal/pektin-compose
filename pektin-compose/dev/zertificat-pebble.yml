@@ -10,13 +10,14 @@ services:
         ports:
             - 15000:15000
         environment:
-            PEBBLE_VA_ALWAYS_VALID: 1 # skip dns challenge validation
+            PEBBLE_VA_ALWAYS_VALID: 0 # skip dns challenge validation
+            PEBBLE_WFE_NONCEREJECT: 0
     zertificat:
         networks:
             - pektin-pebble
         build:
             context: ${ZERTIFICAT_BUILD_PATH}
-            dockerfile: dev-pebble.Dockerfile
+            dockerfile: dev-pebble-insecure.Dockerfile
     server:
         networks:
             - pektin-pebble

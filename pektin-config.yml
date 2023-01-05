@@ -1,0 +1,196 @@
+services:
+    # The dns server serving records from the kv store
+    server:
+        enabled: true
+        logging: "main,pektin_server,pektin_common"
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-server
+            dockerfile: Dockerfile
+    # The UI making it easy to observe records and doing manual work on pektin
+    ui:
+        enabled: true
+        domain: pektin.club
+        subDomain: ui
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-ui
+            dockerfile: Dockerfile
+    # The API controlling everything
+    api:
+        domain: pektin.club
+        subDomain: api
+        logging: "main,pektin_api,pektin_common"
+        perimeterAuth: false
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-api
+            dockerfile: Dockerfile
+    # The secret and configuration store for the system
+    # Stored here are dns keys, certificates, permissions and configuration
+    vault:
+        domain: pektin.club
+        subDomain: vault
+        perimeterAuth: false
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+    # The reverse proxy for the system adding CORS headers to external requests
+    # and routing internal ones to their respective service
+    verkehr:
+        enabled: true
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-verkehr
+            dockerfile: Dockerfile
+        # Whether to use "local" or "minikube" routing for development purposes or "domain" routing for production use
+        routing: local
+        tls: true
+        tempZone:
+            enabled: false
+            provider: pektin.zone
+            routing: local
+        external:
+            domain: pektin.club
+            subDomain: pektin-proxy
+            enabled: true
+            services:
+                - name: gandi
+                  enabled: true
+                  domain: api.gandi.net
+                  accessControlAllowMethods:
+                      - OPTIONS
+                      - POST
+                      - GET
+                      - DELETE
+                      - PUT
+                  accessControlAllowHeaders:
+                      - Content-Type
+                      - Authorization
+                - name: crt
+                  enabled: true
+                  domain: crt.sh
+                  accessControlAllowMethods:
+                      - OPTIONS
+                      - GET
+                  accessControlAllowHeaders: []
+                - name: mx.y.gy
+                  enabled: true
+                  domain: mx.y.gy
+                  accessControlAllowMethods:
+                      - OPTIONS
+                      - GET
+                      - POST
+                      - PUT
+                      - DELETE
+                  accessControlAllowHeaders:
+                      - Content-Type
+                      - X-Api-Key
+    # The ACME client generating certificates for the system and any additional domains you may want to use
+    zertificat:
+        enabled: true
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-zertificat
+            dockerfile: dev.Dockerfile
+        # The ACME contact email used for important information regarding certificates from letsencrypt or
+        # other providers
+        # CHANGE THIS
+        acmeEmail: letsencrypt@y.gy
+        # The ACME endpoint
+        # for production use with letsencrypt CHANGE THIS to https://acme-v02.api.letsencrypt.org/directory
+        acmeEndpoint: "https://acme-staging-v02.api.letsencrypt.org/directory"
+        # Pebble is the testing endpoint for zertificat local development
+        # Don't use in production
+        usePebble: false
+    # A service enabling your to perform DNS lookups from the UI
+    tnt:
+        enabled: true
+        domain: pektin.club
+        subDomain: tnt
+        build:
+            enabled: true
+            path: /home/paul/Documents/pektin/pektin-tnt
+            dockerfile: Dockerfile
+    # Our own JS/TS policy evaluation service
+    ribston:
+        enabled: true
+        build:
+            enabled: false
+            path: /home/paul/Documents/pektin/pektin-ribston
+            dockerfile: Dockerfile
+    # The open policy agent policy evaluation service
+    # NOT WORKING as there are no working policy files yet
+    opa:
+        enabled: false
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+    # Trace collection for pektin services
+    jaeger:
+        enabled: true
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+    # Metrics collection
+    prometheus:
+        enabled: true
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+    # Display of Metrics/Traces and other Monitoring data
+    grafana:
+        enabled: true
+        domain: pektin.club
+        subDomain: grafana
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+    # Alert Manager for sending out system alerts
+    alert:
+        enabled: false
+        build:
+            enabled: false
+            path: ""
+            dockerfile: Dockerfile
+nodes:
+    - # The main node has the API, Vault, ribston and other services
+      main: true
+      # The name is used in the nameservers section as identifier
+      name: balduin
+      # The IPv6 address or addresses of the node
+      ips:
+          - "2a01:4f9:c01f:80::"
+      # The IPv4 address or addresses of the node
+      legacyIps:
+          - "1.1.1.1"
+    - name: gustav
+      ips:
+          - "2a01:4f9:c01f:80::"
+      # after the installation on the main node a setup script will be generated to setup the other nodes
+      # what this script does can be configured here
+      setup:
+          system: ubuntu
+          root:
+              disableSystemdResolved: true
+              installDocker: true
+          cloneRepo: true
+          setup: true
+          start: true
+# The domains of your nameservers and the association to their nodes
+nameservers:
+    - subDomain: ns1
+      domain: pektin.club
+      node: balduin
+      main: true
+    - subDomain: ns2
+      domain: pektin.club
+      node: gustav
+# What policies to use/evaluate
+# only ribston is working
+usePolicies: ribston

@@ -61,3 +61,40 @@ domains will be replaced as they instead could be easily enumerated in crt.sh by
 will be deleted after 7 days
 
 яндекс.рф
+
+# pektin the complete off cloud platform for your applications
+
+applications and their creators need many services to make their applications work
+
+most of this is easy in the managed cloud but complicated to setup in a non cloud private way
+
+pektin shall be the integrated cloud os with dns, mail, certificate handling, secret handling, config management, service discovery deployment etc.
+
+# essential services
+
+-   smtp mail handling
+-   push notification handling
+-   config and secret handling like vault
+-   service http routing load balancing etc.
+-   certificate generation
+-   dns administration
+-   multi node
+-   user authentication handling (interossea)
+-   observability
+-   safe and fast container build system and version management (something better than gitlab)
+-   shared computing (providing computing time to a project)
+
+# applications running on this ecosystem
+
+-   maps
+-   cloud
+-   search engine
+-   simple client side web apps like squoosh
+-   simple installation for other projects with a service definition for the pektin ecosystem
+
+# focus
+
+-   mostly web apps
+-   near to no cpu and memory util when not in use (unlike gitlab minecraft jellyfin etc.)
+
+make feoco directly available pulling certs from vault without reverse proxy via ipv6
